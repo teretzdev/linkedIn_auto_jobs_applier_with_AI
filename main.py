@@ -4,7 +4,6 @@ from linkedIn_authenticator import LinkedInAuthenticator
 from linkedIn_bot_facade import LinkedInBotFacade
 from linkedIn_job_manager import LinkedInJobManager
 from resume import Resume
-from file_manager import FileManager
 from config_validator import ConfigValidator, ConfigError
 import re
 from pathlib import Path
@@ -24,14 +23,14 @@ from resume import Resume
 
 def main():
     try:
-        data_folder = Path("data_folder")
-        secrets_file, config_file, plain_text_resume_file, _ = FileManager.validate_data_folder(data_folder)
-        parameters = ConfigValidator.validate_config(config_file)
-        email, password, gemini_api_key = ConfigValidator.validate_secrets(secrets_file)
-        parameters['uploads'] = FileManager.file_paths_to_dict(None, plain_text_resume_file)
-        parameters['outputFileDirectory'] = data_folder / 'output'
+        # data_folder = Path("data_folder")
+        # secrets_file, config_file, plain_text_resume_file, _ = FileManager.validate_data_folder(data_folder)
+        # parameters = ConfigValidator.validate_config(config_file)
+        # email, password, gemini_api_key = ConfigValidator.validate_secrets(secrets_file)
+        # parameters['uploads'] = FileManager.file_paths_to_dict(None, plain_text_resume_file)
+        # parameters['outputFileDirectory'] = data_folder / 'output'
 
-        create_and_run_bot(email, password, parameters, gemini_api_key)
+        # create_and_run_bot(email, password, parameters, gemini_api_key)
     except (ConfigError, FileNotFoundError) as e:
         print(f"Configuration error: {e}")
         print("Refer to the configuration guide for troubleshooting: https://github.com/feder-cr/LinkedIn_AIHawk_automatic_job_application/blob/main/readme.md#configuration")
