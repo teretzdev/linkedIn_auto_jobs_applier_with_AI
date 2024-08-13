@@ -31,6 +31,7 @@ def main():
         # parameters['outputFileDirectory'] = data_folder / 'output'
 
         # create_and_run_bot(email, password, parameters, gemini_api_key)
+        pass
     except (ConfigError, FileNotFoundError) as e:
         print(f"Configuration error: {e}")
         print("Refer to the configuration guide for troubleshooting: https://github.com/feder-cr/LinkedIn_AIHawk_automatic_job_application/blob/main/readme.md#configuration")
