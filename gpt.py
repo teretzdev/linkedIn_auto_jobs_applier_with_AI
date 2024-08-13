@@ -24,7 +24,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 class LLMLogger:
     
-    def __init__(self, llm: CustomGeminiModel):
+    def __init__(self, llm):
         self.llm = llm
 
     def log(self, prompt, response):
@@ -115,30 +115,16 @@ class LoggerChatModel:
             },
         }
 
-def get_ai_response(model, prompt):
-    if model == "gemini":
-        url = "https://api.gemini.com/v1/generate"
-        headers = {
-            "Authorization": f"Bearer {gemini_api_key}",
-            "Content-Type": "application/json"
-        }
-        data = {
-            "prompt": prompt,
-            "length": 2048,
-            "temperature": 0.5
-        }
-    
-    response = requests.post(url, headers=headers, json=data)
-    return response.json()["result"]
 
 class GPTAnswerer:
     def __init__(self, gemini_api_key):
+        self.gemini_api_key = gemini_api_key
         self.llm_cheap = LoggerChatModel(
-            ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=gemini_api_key, temperature=0.3)
+            ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=self.gemini_api_key, temperature=0.3)
         )
         self.llm_gemini = self.llm_cheap
 
-    @property
+    @property 
     def job_description(self):
         return self.job.description
 
