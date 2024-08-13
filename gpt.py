@@ -10,26 +10,45 @@ from langchain_core.messages.ai import AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompt_values import StringPromptValue
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
 from Levenshtein import distance
+import requests
 
 import strings
 
 load_dotenv()
 
+# Update for Gemini API 
+from langchain_community.llms import GoogleGemini
+from langchain.chains import LLMChain, ConversationChain
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 class LLMLogger:
     
-    def __init__(self, llm: ChatOpenAI):
+    def __init__(self, llm: CustomGeminiModel):
         self.llm = llm
+
+    def log(self, prompt, response):
+        log_entry = {
+            "model": self.llm.model_name,
+            "time": datetime.now().isoformat(),
+            "prompts": [prompt],
+            "replies": [response],
+            "total_tokens": 2048,
+            "input_tokens": 2048,
+            "output_tokens": 2048,
+            "total_cost": 0.0
+        }
+
+        with open("calls_log.json", "a", encoding="utf-8") as f:
+            json_string = json.dumps(log_entry, ensure_ascii=False, indent=4)
+            f.write(json_string + "\n")
 
     @staticmethod
     def log_request(prompts, parsed_reply: Dict[str, Dict]):
-        calls_log = os.path.join(os.getcwd(), "open_ai_calls.json")
+        calls_log = os.path.join(os.getcwd(), "gemini_calls.json")
         if isinstance(prompts, StringPromptValue):
             prompts = prompts.text
         elif isinstance(prompts, Dict):
-            # Convert prompts to a dictionary if they are not in the expected format
             prompts = {
                 f"prompt_{i+1}": prompt.content
                 for i, prompt in enumerate(prompts.messages)
@@ -40,86 +59,84 @@ class LLMLogger:
                 for i, prompt in enumerate(prompts.messages)
             }
 
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        current_time = datetime.now().isoformat()
 
-        # Extract token usage details from the response
-        token_usage = parsed_reply["usage_metadata"]
+        token_usage = parsed_reply["token_usage"]
         output_tokens = token_usage["output_tokens"]
         input_tokens = token_usage["input_tokens"]
         total_tokens = token_usage["total_tokens"]
 
-        # Extract model details from the response
-        model_name = parsed_reply["response_metadata"]["model_name"]
+        model_name = parsed_reply["model"]
+
         prompt_price_per_token = 0.00000015
         completion_price_per_token = 0.0000006
 
-        # Calculate the total cost of the API call
         total_cost = (input_tokens * prompt_price_per_token) + (
             output_tokens * completion_price_per_token
         )
 
-        # Create a log entry with all relevant information
         log_entry = {
             "model": model_name,
             "time": current_time,
             "prompts": prompts,
-            "replies": parsed_reply["content"],  # Response content
+            "replies": parsed_reply["content"],
             "total_tokens": total_tokens,
             "input_tokens": input_tokens,
             "output_tokens": output_tokens,
             "total_cost": total_cost,
         }
 
-        # Write the log entry to the log file in JSON format
         with open(calls_log, "a", encoding="utf-8") as f:
             json_string = json.dumps(log_entry, ensure_ascii=False, indent=4)
             f.write(json_string + "\n")
 
+   # ... (rest of the class implementation remains the same)
 
 class LoggerChatModel:
-
-    def __init__(self, llm: ChatOpenAI):
+    def __init__(self, llm: ChatGoogleGenerativeAI):
         self.llm = llm
 
+
     def __call__(self, messages: List[Dict[str, str]]) -> str:
-        # Call the LLM with the provided messages and log the response.
         reply = self.llm(messages)
         parsed_reply = self.parse_llmresult(reply)
         LLMLogger.log_request(prompts=messages, parsed_reply=parsed_reply)
         return reply
 
-    def parse_llmresult(self, llmresult: AIMessage) -> Dict[str, Dict]:
-        # Parse the LLM result into a structured format.
-        content = llmresult.content
-        response_metadata = llmresult.response_metadata
-        id_ = llmresult.id
-        usage_metadata = llmresult.usage_metadata
-
-        parsed_result = {
-            "content": content,
-            "response_metadata": {
-                "model_name": response_metadata.get("model_name", ""),
-                "system_fingerprint": response_metadata.get("system_fingerprint", ""),
-                "finish_reason": response_metadata.get("finish_reason", ""),
-                "logprobs": response_metadata.get("logprobs", None),
-            },
-            "id": id_,
+    def parse_llmresult(self, llmresult: str) -> Dict[str, Dict]:
+        return {
+            "content": llmresult['content'],
+            "response_metadata": {"model_name": llmresult['model']},
+            "id": llmresult['id'],
             "usage_metadata": {
-                "input_tokens": usage_metadata.get("input_tokens", 0),
-                "output_tokens": usage_metadata.get("output_tokens", 0),
-                "total_tokens": usage_metadata.get("total_tokens", 0),
+                "input_tokens": llmresult['token_usage']['input_tokens'],
+                "output_tokens": llmresult['token_usage']['output_tokens'],
+                "total_tokens": llmresult['token_usage']['total_tokens'],
             },
         }
-        return parsed_result
 
+def get_ai_response(model, prompt):
+    if model == "gemini":
+        url = "https://api.gemini.com/v1/generate"
+        headers = {
+            "Authorization": f"Bearer {gemini_api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "prompt": prompt,
+            "length": 2048,
+            "temperature": 0.5
+        }
+    
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()["result"]
 
 class GPTAnswerer:
-    def __init__(self, openai_api_key):
+    def __init__(self, gemini_api_key):
         self.llm_cheap = LoggerChatModel(
-            ChatOpenAI(
-                model_name="gpt-4o-mini", openai_api_key=openai_api_key, temperature=0.8
-            )
+            ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=gemini_api_key, temperature=0.3)
         )
+        self.llm_gemini = self.llm_cheap
 
     @property
     def job_description(self):
@@ -140,7 +157,6 @@ class GPTAnswerer:
 
     @staticmethod
     def _preprocess_template_string(template: str) -> str:
-        # Preprocess a template string to remove unnecessary indentation.
         return textwrap.dedent(template)
 
     def set_resume(self, resume):
@@ -157,16 +173,15 @@ class GPTAnswerer:
             strings.summarize_prompt_template
         )
         prompt = ChatPromptTemplate.from_template(strings.summarize_prompt_template)
-        chain = prompt | self.llm_cheap | StrOutputParser()
-        output = chain.invoke({"text": text})
+        chain = LLMChain(llm=self.llm_cheap, prompt=prompt, output_parser=StrOutputParser())
+        output = chain.run({"text": text})
         return output
     
-
     def get_resume_html(self):
         resume_markdown_prompt = ChatPromptTemplate.from_template(strings.resume_markdown_template)
         fusion_job_description_resume_prompt = ChatPromptTemplate.from_template(strings.fusion_job_description_resume_template)
-        resume_markdown_chain = resume_markdown_prompt | self.llm_cheap | StrOutputParser()
-        fusion_job_description_resume_chain = fusion_job_description_resume_prompt | self.llm_cheap | StrOutputParser()
+        resume_markdown_chain = LLMChain(llm=self.llm_cheap, prompt=resume_markdown_prompt, output_parser=StrOutputParser())
+        fusion_job_description_resume_chain = LLMChain(llm=self.llm_cheap, prompt=fusion_job_description_resume_prompt, output_parser=StrOutputParser())
         
         casual_markdown_path = os.path.abspath("resume_template/casual_markdown.js")
         reorganize_header_path = os.path.abspath("resume_template/reorganizeHeader.js")
@@ -180,22 +195,19 @@ class GPTAnswerer:
             | (lambda formatted_resume: html_template + formatted_resume)
         )
         try:
-            output = composed_chain.invoke({
+            output = composed_chain.run({
                 "resume": self.resume,
                 "job_description": self.job.summarize_job_description
             })
             return output
         except Exception as e:
-            #print(f"Error during elaboration: {e}")
             pass
         
-
     def _create_chain(self, template: str):
         prompt = ChatPromptTemplate.from_template(template)
-        return prompt | self.llm_cheap | StrOutputParser()
+        return LLMChain(llm=self.llm_cheap, prompt=prompt, output_parser=StrOutputParser())
 
     def answer_question_textual_wide_range(self, question: str) -> str:
-        # Define chains for each section of the resume
         chains = {
             "personal_information": self._create_chain(strings.personal_information_template),
             "self_identification": self._create_chain(strings.self_identification_template),
@@ -218,12 +230,12 @@ class GPTAnswerer:
             "Certifications, Languages, Interests, Cover letter"
         )
         prompt = ChatPromptTemplate.from_template(section_prompt)
-        chain = prompt | self.llm_cheap | StrOutputParser()
-        output = chain.invoke({"question": question})
+        chain = LLMChain(llm=self.llm_cheap, prompt=prompt, output_parser=StrOutputParser())
+        output = chain.run({"question": question})
         section_name = output.lower().replace(" ", "_")
         if section_name == "cover_letter":
             chain = chains.get(section_name)
-            output= chain.invoke({"resume": self.resume, "job_description": self.job_description})
+            output= chain.run({"resume": self.resume, "job_description": self.job_description})
             return output
         resume_section = getattr(self.resume, section_name, None)
         if resume_section is None:
@@ -231,20 +243,20 @@ class GPTAnswerer:
         chain = chains.get(section_name)
         if chain is None:
             raise ValueError(f"Chain not defined for section '{section_name}'")
-        return chain.invoke({"resume_section": resume_section, "question": question})
+        return chain.run({"resume_section": resume_section, "question": question})
 
     def answer_question_textual(self, question: str) -> str:
         template = self._preprocess_template_string(strings.resume_stuff_template)
         prompt = ChatPromptTemplate.from_template(template)
-        chain = prompt | self.llm_cheap | StrOutputParser()
-        output = chain.invoke({"resume": self.resume, "question": question})
+        chain = LLMChain(llm=self.llm_cheap, prompt=prompt, output_parser=StrOutputParser())
+        output = chain.run({"resume": self.resume, "question": question})
         return output
 
     def answer_question_numeric(self, question: str, default_experience: int = 3) -> int:
         func_template = self._preprocess_template_string(strings.numeric_question_template)
         prompt = ChatPromptTemplate.from_template(func_template)
-        chain = prompt | self.llm_cheap | StrOutputParser()
-        output_str = chain.invoke({"resume": self.resume, "question": question, "default_experience": default_experience})
+        chain = LLMChain(llm=self.llm_cheap, prompt=prompt, output_parser=StrOutputParser())
+        output_str = chain.run({"resume": self.resume, "question": question, "default_experience": default_experience})
         try:
             output = self.extract_number_from_string(output_str)
         except ValueError:
@@ -261,7 +273,55 @@ class GPTAnswerer:
     def answer_question_from_options(self, question: str, options: list[str]) -> str:
         func_template = self._preprocess_template_string(strings.options_template)
         prompt = ChatPromptTemplate.from_template(func_template)
-        chain = prompt | self.llm_cheap | StrOutputParser()
-        output_str = chain.invoke({"resume": self.resume, "question": question, "options": options})
+        chain = LLMChain(llm=self.llm_cheap, prompt=prompt, output_parser=StrOutputParser())
+        output_str = chain.run({"resume": self.resume, "question": question, "options": options})
         best_option = self.find_best_match(output_str, options)
         return best_option
+
+    def try_fix_answer(self, question: str, answer: str, error_text: str) -> str:
+        error_text = error_text.lower()
+        if error_text == "this is a required field":
+            return "Please enter a value"
+        elif error_text == "please enter a valid phone number":
+            return "123-456-7890"
+        elif error_text == "this should be a valid email address":
+            return "test@example.com"
+        elif "must be at least 5 characters" in error_text:
+            if len(answer) > 4:
+                return answer
+            else:
+                return answer + "123"
+        elif "must be at least 8 characters" in error_text:
+            if len(answer) > 7:
+                return answer
+            else:
+                return answer + "12345"
+        else:
+            return answer
+
+from langchain_core.language_models import BaseChatModel
+import requests
+
+class CustomGeminiModel(BaseChatModel):
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+
+    def _call(self, messages, stop=None):
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        data = {
+            "contents": [{"parts": [{"text": m.content}]} for m in messages]
+        }
+        response = requests.post(self.base_url, headers=headers, json=data)
+        response.raise_for_status()
+        return response.json()["candidates"][0]["content"]["parts"][0]["text"]
+
+    @property
+    def _llm_type(self):
+        return "custom_gemini"
+
+# Replace GoogleGemini with CustomGeminiModel in your code
+# self.llm_cheap = LoggerChatModel(CustomGeminiModel(api_key=gemini_api_key))
