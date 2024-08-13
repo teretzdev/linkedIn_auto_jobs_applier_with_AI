@@ -18,7 +18,6 @@ import strings
 load_dotenv()
 
 # Update for Gemini API 
-from langchain_community.llms import GoogleGemini
 from langchain.chains import LLMChain, ConversationChain
 from langchain_google_genai import ChatGoogleGenerativeAI
 
