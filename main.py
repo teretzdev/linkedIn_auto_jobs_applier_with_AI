@@ -27,15 +27,14 @@ from resume import Resume
 def main():
     logging.info("Starting main function")
     try:
-        # data_folder = Path("data_folder")
-        # secrets_file, config_file, plain_text_resume_file, _ = FileManager.validate_data_folder(data_folder)
-        # parameters = ConfigValidator.validate_config(config_file)
-        # email, password, gemini_api_key = ConfigValidator.validate_secrets(secrets_file)
-        # parameters['uploads'] = FileManager.file_paths_to_dict(None, plain_text_resume_file)
-        # parameters['outputFileDirectory'] = data_folder / 'output'
+        data_folder = Path("data_folder")
+        secrets_file, config_file, plain_text_resume_file, _ = FileManager.validate_data_folder(data_folder)
+        parameters = ConfigValidator.validate_config(config_file)
+        email, password, gemini_api_key = ConfigValidator.validate_secrets(secrets_file)
+        parameters['uploads'] = FileManager.file_paths_to_dict(None, plain_text_resume_file)
+        parameters['outputFileDirectory'] = data_folder / 'output'
 
-        # create_and_run_bot(email, password, parameters, gemini_api_key)
-        pass
+        create_and_run_bot(email, password, parameters, gemini_api_key)
     except (ConfigError, FileNotFoundError) as e:
         logging.error(f"Configuration error: {e}")
         logging.info("Refer to the configuration guide for troubleshooting: https://github.com/feder-cr/LinkedIn_AIHawk_automatic_job_application/blob/main/readme.md#configuration")
