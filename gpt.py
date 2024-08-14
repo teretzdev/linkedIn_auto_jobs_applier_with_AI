@@ -65,24 +65,18 @@ class GPTAnswerer:
                     ChatGooglePalm(temperature=0.1, model="models/chat-bison-001", google_api_key=self.google_api_key)
                 )
             else:
-                # Replace with actual Gemini querying logic
-                self.llm_cheap = self._initialize_gemini()
+                # Initialize the Gemini API client
+                aiplatform.init(project=os.environ['GOOGLE_CLOUD_PROJECT'], location="us-central1")
+
+                # Specify the Gemini model endpoint
+                self.endpoint = aiplatform.Endpoint.fetch(endpoint_name="projects/YOUR_PROJECT_ID/locations/YOUR_REGION/endpoints/ENDPOINT_NAME")
+                self.llm_cheap = self._query_gemini
         else:
             raise RuntimeError("Either an OpenAI API key or a Google API key must be provided.")
 
-    def _initialize_gemini(self):
-        # Initialize the Gemini API client
-        aiplatform.init(project=os.environ['GOOGLE_CLOUD_PROJECT'], location="us-central1")
-
-        # Specify the Gemini model endpoint
-        endpoint = aiplatform.Endpoint.fetch(endpoint_name="projects/YOUR_PROJECT_ID/locations/YOUR_REGION/endpoints/ENDPOINT_NAME")
-
-        # Define a function to query Gemini
-        def query_gemini(prompts):
-            response = endpoint.predict(instances=[{"content": prompts[0].content}])
-            return {'output': {'output': response.predictions[0]["content"]}}
-
-        return query_gemini
+    def _query_gemini(self, prompts):
+        response = self.endpoint.predict(instances=[{"content": prompts[0].content}])
+        return {'output': {'output': response.predictions[0]["content"]}}
 
     @staticmethod
     def find_best_match(text: str, options: list[str]) -> str:
