@@ -5,9 +5,16 @@ import time
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
-import time
 import glob
 from webdriver_manager.chrome import ChromeDriverManager
+
+# Updated import for Google Gemini
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.chains import LLMChain
+from langchain.prompts.chat import ChatPromptTemplate
+from langchain.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.chains.summarize import load_summarize_chain
 
 headless = False
 chromeProfilePath = os.path.join(os.getcwd(), "chrome_profile", "linkedin_profile")
@@ -53,49 +60,30 @@ def scroll_slow(driver, scrollable_element, start=0, end=3600, step=100, reverse
     except Exception as e:
         print(f"Exception occurred: {e}")
 
-
 def HTML_to_PDF(FilePath):
     # Validate and prepare file paths
     if not os.path.isfile(FilePath):
         raise FileNotFoundError(f"The specified file does not exist: {FilePath}")
     FilePath = f"file:///{os.path.abspath(FilePath).replace(os.sep, '/')}"
-    # Set up Chrome options
-    chrome_options = webdriver.ChromeOptions()
-    # Initialize Chrome driver
-    service = ChromeService(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
     
-    try:
-        # Load the HTML file
-        driver.get(FilePath)
-        time.sleep(3)
-        start_time = time.time()
-        pdf_base64 = driver.execute_cdp_cmd("Page.printToPDF", {
-            "printBackground": True,    
-            "landscape": False,         
-            "paperWidth": 10,           
-            "paperHeight": 11,           
-            "marginTop": 0,            
-            "marginBottom": 0,
-            "marginLeft": 0,
-            "marginRight": 0,
-            "displayHeaderFooter": False,
-            "preferCSSPageSize": True,   
-            "generateDocumentOutline": False, 
-            "generateTaggedPDF": False,
-            "transferMode": "ReturnAsBase64"
-        })
-        
-        if time.time() - start_time > 120:
-            raise TimeoutError("PDF generation exceeded the specified timeout limit.")
-        return pdf_base64['data']
+    # Using Gemini API to generate PDF
+    llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=os.environ.get("GOOGLE_API_KEY"))
 
-    except WebDriverException as e:
-        raise RuntimeError(f"WebDriver exception occurred: {e}")
-    
-    finally:
-        # Ensure the driver is closed
-        driver.quit()
+    with open(FilePath, 'r', encoding='utf-8') as f:
+        html_content = f.read()
+
+    # Use Gemini to generate a PDF from the HTML 
+    prompt = ChatPromptTemplate.from_template(
+        "Please convert the following HTML into a PDF format.\n\n{html}"
+    )
+    chain = LLMChain(llm=llm, prompt=prompt)
+
+    try:
+        pdf_base64 = chain.run({"html": html_content})
+        return pdf_base64
+
+    except Exception as e:
+        raise RuntimeError(f"Error generating PDF: {e}")
 
 def chromeBrowserOptions():
     options = webdriver.ChromeOptions()
@@ -113,7 +101,7 @@ def chromeBrowserOptions():
     options.add_experimental_option('useAutomationExtension', False)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     
-    # Assicurati che la directory del profilo Chrome esista
+    # Ensure that the Chrome profile directory exists
     ensure_chrome_profile()
 
     if len(chromeProfilePath) > 0:
@@ -126,17 +114,16 @@ def chromeBrowserOptions():
         
     return options
 
-
 def printred(text):
-    # Codice colore ANSI per il rosso
+    # ANSI color code for red
     RED = "\033[91m"
     RESET = "\033[0m"
-    # Stampa il testo in rosso
+    # Print the text in red
     print(f"{RED}{text}{RESET}")
 
 def printyellow(text):
-    # Codice colore ANSI per il giallo
+    # ANSI color code for yellow
     YELLOW = "\033[93m"
     RESET = "\033[0m"
-    # Stampa il testo in giallo
+    # Print the text in yellow
     print(f"{YELLOW}{text}{RESET}")
