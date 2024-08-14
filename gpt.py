@@ -71,10 +71,10 @@ class GPTAnswerer:
 
     def _initialize_gemini(self):
         # Initialize the Gemini API client
-        aiplatform.init(project='YOUR_PROJECT_ID', location='YOUR_REGION')
+        aiplatform.init(project=YOUR_PROJECT_ID, location=YOUR_REGION)
 
         # Specify the Gemini model endpoint
-        endpoint = aiplatform.Endpoint.fetch('ENDPOINT_NAME')
+        endpoint = aiplatform.Endpoint.fetch(ENDPOINT_NAME)
 
         # Create a prediction client
         client = endpoint.predict()
