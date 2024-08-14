@@ -1,21 +1,19 @@
-remote: [true/false]
-
+remote: true
 experienceLevel:
- internship: [true/false]
- entry: [true/false]
- associate: [true/false]
- mid-senior level: [true/false]
- director: [true/false]
- executive: [true/false]
-
+  entry: true
+  mid: true
+  senior: true
 jobTypes:
- full-time: [true/false]
- contract: [true/false]
- part-time: [true/false]
- temporary: [true/false]
- internship: [true/false]
- other: [true/false]
- volunteer: [true/false]
+  full-time: true
+  part-time: true
+  contract: true
+
+ai_models:
+  openai:
+    api_key: [OpenAI API key]
+  gemini:
+    api_key: [Google Gemini API key]
+    model: [Google Gemini model]
 
 date:
  all time: [true/false]
