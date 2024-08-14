@@ -60,28 +60,27 @@ class GPTAnswerer:
         self.openai_api_key = openai_api_key
         if self.google_api_key is not None:
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.google_api_key
-            self.llm_cheap = LoggerChatModel(
-                ChatGooglePalm(temperature=0.1, model="models/chat-bison-001", google_api_key=self.google_api_key)
-            )
-        elif self.openai_api_key is not None:
-            # Replace with actual Gemini querying logic
-            self.llm_cheap = self._initialize_gemini()
+            if self.openai_api_key is not None:
+                self.llm_cheap = LoggerChatModel(
+                    ChatGooglePalm(temperature=0.1, model="models/chat-bison-001", google_api_key=self.google_api_key)
+                )
+            else:
+                # Replace with actual Gemini querying logic
+                self.llm_cheap = self._initialize_gemini()
         else:
             raise RuntimeError("Either an OpenAI API key or a Google API key must be provided.")
 
     def _initialize_gemini(self):
         # Initialize the Gemini API client
-        aiplatform.init(project="my-gcp-project", location="us-central1")
+        aiplatform.init(project=os.environ['GOOGLE_CLOUD_PROJECT'], location="us-central1")
 
         # Specify the Gemini model endpoint
-        endpoint = aiplatform.Endpoint.fetch("my-gemini-endpoint")
-
-        # Create a prediction client
-        client = endpoint.predict()
+        endpoint = aiplatform.Endpoint.fetch(endpoint_name="projects/YOUR_PROJECT_ID/locations/YOUR_REGION/endpoints/ENDPOINT_NAME")
 
         # Define a function to query Gemini
+        @retry.Retry(deadline=300)
         def query_gemini(prompt: str):
-            response = client.predict(instances=[{"content": prompt}])
+            response = endpoint.predict(instances=[{"content": prompt}])
             return response.predictions[0]["content"]
 
         return query_gemini
