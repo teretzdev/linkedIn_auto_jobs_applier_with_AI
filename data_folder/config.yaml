@@ -8,13 +8,6 @@ jobTypes:
   part-time: true
   contract: true
 
-ai_models:
-  openai:
-    api_key: [OpenAI API key]
-  gemini:
-    api_key: [Google Gemini API key]
-    model: [Google Gemini model]
-
 date:
  all time: [true/false]
  month: [true/false]
