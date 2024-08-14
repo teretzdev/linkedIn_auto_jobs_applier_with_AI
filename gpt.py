@@ -78,10 +78,9 @@ class GPTAnswerer:
         endpoint = aiplatform.Endpoint.fetch(endpoint_name="projects/YOUR_PROJECT_ID/locations/YOUR_REGION/endpoints/ENDPOINT_NAME")
 
         # Define a function to query Gemini
-        @retry.Retry(deadline=300)
-        def query_gemini(prompt: str):
-            response = endpoint.predict(instances=[{"content": prompt}])
-            return response.predictions[0]["content"]
+        def query_gemini(prompts):
+            response = endpoint.predict(instances=[{"content": prompts[0].content}])
+            return {'output': {'output': response.predictions[0]["content"]}}
 
         return query_gemini
 
