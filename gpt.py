@@ -66,10 +66,10 @@ class GPTAnswerer:
                 )
             else:
                 # Initialize the Gemini API client
-                aiplatform.init(project=os.environ['GOOGLE_CLOUD_PROJECT'], location="us-central1")
+                aiplatform.init(project='YOUR_PROJECT_ID')
 
                 # Specify the Gemini model endpoint
-                self.endpoint = aiplatform.Endpoint.fetch(endpoint_name="projects/YOUR_PROJECT_ID/locations/YOUR_REGION/endpoints/ENDPOINT_NAME")
+                self.endpoint = aiplatform.Endpoint.fetch(endpoint_name='projects/YOUR_PROJECT_ID/locations/YOUR_REGION/endpoints/ENDPOINT_NAME')
                 self.llm_cheap = self._query_gemini
         else:
             raise RuntimeError("Either an OpenAI API key or a Google API key must be provided.")
