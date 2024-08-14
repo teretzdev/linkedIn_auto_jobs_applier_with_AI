@@ -13,6 +13,7 @@ class FileManager:
         output_directory = data_folder / "output"
 
         if not all([secrets_file.exists(), config_file.exists(), plain_text_resume_file.exists()]):
+            print(f"Error: One or more required files are missing in the data folder: {data_folder}")
             raise FileNotFoundError("One or more required files are missing in the data folder.")
 
         return secrets_file, config_file, plain_text_resume_file, output_directory
