@@ -21,6 +21,7 @@ from linkedIn_authenticator import LinkedInAuthenticator
 from linkedIn_bot_facade import LinkedInBotFacade
 from linkedIn_job_manager import LinkedInJobManager
 from resume import Resume
+from file_manager import FileManager  # Import FileManager from your_module
 
 # ... (rest of the code remains the same)
 
