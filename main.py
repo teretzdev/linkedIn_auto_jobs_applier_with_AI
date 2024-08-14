@@ -102,7 +102,7 @@ class ConfigValidator:
         except FileNotFoundError:
             raise ConfigError(f"Secrets file not found: {secrets_yaml_path}")
 
-        mandatory_secrets = ['email', 'password', 'openai_api_key']
+        mandatory_secrets = ['email', 'password', 'openai_api_key', 'google_api_key']
 
         for secret in mandatory_secrets:
             if secret not in secrets:
@@ -113,9 +113,11 @@ class ConfigValidator:
         if not secrets['password']:
             raise ConfigError(f"Password cannot be empty in secrets file {secrets_yaml_path}.")
         if not secrets['openai_api_key']:
-            raise ConfigError(f"OpenAI API key cannot be empty in secrets file {secrets_yaml_path}.")
+            secrets['openai_api_key'] = None
+        if not secrets['google_api_key']:
+            secrets['google_api_key'] = None
 
-        return secrets['email'], str(secrets['password']), secrets['openai_api_key']
+        return secrets['email'], str(secrets['password']), secrets['openai_api_key'], secrets['google_api_key']
 
 class FileManager:
     @staticmethod
@@ -169,12 +171,12 @@ def init_browser():
     except Exception as e:
         raise RuntimeError(f"Failed to initialize browser: {str(e)}")
 
-def create_and_run_bot(email: str, password: str, parameters: dict, openai_api_key: str):
+def create_and_run_bot(email: str, password: str, parameters: dict, openai_api_key: str, google_api_key: str):
     try:
         browser = init_browser()
         login_component = LinkedInAuthenticator(browser)
         apply_component = LinkedInJobManager(browser)
-        gpt_answerer_component = GPTAnswerer(openai_api_key)
+        gpt_answerer_component = GPTAnswerer(openai_api_key, google_api_key)
         with open(parameters['uploads']['plainTextResume'], "r") as file:
             plain_text_resume_file = file.read()
         resume_object = Resume(plain_text_resume_file)
@@ -195,11 +197,11 @@ def main(resume: Path = None):
         data_folder = Path("data_folder")
         secrets_file, config_file, plain_text_resume_file, output_folder = FileManager.validate_data_folder(data_folder)
         parameters = ConfigValidator.validate_config(config_file)
-        email, password, openai_api_key = ConfigValidator.validate_secrets(secrets_file)
+        email, password, openai_api_key, google_api_key = ConfigValidator.validate_secrets(secrets_file)
         parameters['uploads'] = FileManager.file_paths_to_dict(resume, plain_text_resume_file)
         parameters['outputFileDirectory'] = output_folder
 
-        create_and_run_bot(email, password, parameters, openai_api_key)
+        create_and_run_bot(email, password, parameters, openai_api_key, google_api_key)
     except ConfigError as ce:
         print(f"Configuration error: {str(ce)}")
         print("Refer to the configuration guide for troubleshooting: https://github.com/feder-cr/LinkedIn_AIHawk_automatic_job_application/blob/main/readme.md#configuration")
