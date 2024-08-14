@@ -55,7 +55,6 @@ def create_and_run_bot(email, password, parameters, gemini_api_key):
     # ... (rest of the function implementation)
 
 if __name__ == "__main__":
-    create_and_run_bot(email, password, parameters, gemini_api_key)
     main()
     """
     Creates and runs the LinkedIn bot.
