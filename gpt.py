@@ -4,7 +4,7 @@ from typing import Dict
 
 from google.api_core import retry
 from google.cloud import aiplatform
-from langchain.chat_models import ChatGooglePalm
+from langchain_community.chat_models import ChatGooglePalm # Import from langchain-community
 from langchain.schema import (
     AIMessage,
     HumanMessage,
