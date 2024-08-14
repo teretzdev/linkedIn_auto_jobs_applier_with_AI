@@ -1,0 +1,10 @@
+
+**Replace the following placeholders with your actual values:**
+
+*   **YOUR\_PROJECT\_ID:** Your Google Cloud project ID.
+*   **YOUR\_REGION:** The region where your Gemini model is deployed.
+*   **ENDPOINT\_NAME:** The name of your Gemini model endpoint.
+
+This updated code will now use Google Gemini when a Google API key is provided. 
+
+Remember to test these changes thoroughly to ensure they integrate correctly with your existing codebase.
