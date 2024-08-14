@@ -48,4 +48,11 @@ def main():
         logging.info("Refer to the general troubleshooting guide: https://github.com/feder-cr/LinkedIn_AIHawk_automatic_job_application/blob/main/readme.md#configuration")
 
 if __name__ == "__main__":
+    create_and_run_bot(email, password, parameters, gemini_api_key)
     main()
+def create_and_run_bot(email, password, parameters, gemini_api_key):
+    """
+    Creates and runs the LinkedIn bot.
+    """
+    logging.info("Creating and running the bot")
+    # ... (rest of the function implementation)
