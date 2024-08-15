@@ -30,30 +30,6 @@ class LLMLogger:
         return parsed_reply
 
 
-class LoggerChatModel:
-    def __init__(self, llm: ChatGooglePalm):
-        self.llm = llm
-
-    def __call__(self, prompts, stop=None, **kwargs):
-        parsed_reply = self.parse_llmresult(self.llm(prompts, stop, **kwargs))
-        return parsed_reply
-
-    def parse_llmresult(self, llmresult: str) -> Dict[str, Dict]:
-        # Split the string by double newlines to separate the sections
-        sections = llmresult.split('\n\n')
-
-        # Create a dictionary to store the parsed data
-        parsed_data = {}
-
-        # Iterate over the sections and extract the key-value pairs
-        for section in sections:
-            if ':' in section:
-                key, value = section.split(':', 1)
-                parsed_data[key.strip()] = value.strip()
-
-        return {'output': parsed_data}
-
-
 class GPTAnswerer:
     def __init__(self, openai_api_key: str, google_api_key: str):
         self.google_api_key = google_api_key
@@ -61,7 +37,7 @@ class GPTAnswerer:
         if self.google_api_key is not None:
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.google_api_key
             if self.openai_api_key is not None:
-                self.llm_cheap = LoggerChatModel(
+                self.llm_cheap = LLMLogger(
                     ChatGooglePalm(temperature=0.1, model="models/chat-bison-001", google_api_key=self.google_api_key)
                 )
             else:
