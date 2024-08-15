@@ -2,9 +2,8 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
 class GPTAnswerer:
-    def __init__(self, model_name: str, api_key: str, project_id: str, location: str):
+    def __init__(self, model_name: str, project_id: str, location: str):
         self.model_name = model_name
-        self.api_key = api_key
         self.project_id = project_id
         self.location = location
         self.service = build(
