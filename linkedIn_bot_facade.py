@@ -11,6 +11,7 @@ class LinkedInBotFacade:
             "parameters_set": False,
             "logged_in": False
         }
+        self.gemini = gemini.Gemini()
 
     def set_resume(self, resume):
         if not resume:
@@ -44,6 +45,7 @@ class LinkedInBotFacade:
         self.login_component.set_secrets(self.email, self.password)
         self.login_component.start()
         self.state["logged_in"] = True
+        self.gemini.login(self.email, self.password)
 
     def start_apply(self):
         if not self.state["logged_in"]:
@@ -55,3 +57,7 @@ class LinkedInBotFacade:
         if not self.state["parameters_set"]:
             raise ValueError("Parameters must be set before applying.")
         self.apply_component.start_applying()
+        self.gemini.apply(self.parameters)
+
+    def generate_answer(self, question):
+        return self.gemini.generate_answer(question)
