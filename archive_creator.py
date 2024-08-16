@@ -21,6 +21,8 @@ def create_archive(dir_path, archive_name):
                 zipf.write(file_path, arcname)
                 print(f"Added: {arcname}")
 
+    print(f"Archive '{archive_name}' created successfully.")
+
 # Example usage:
 dir_to_archive = "d:\\linkedin-bot-ai\\"
 archive_name = "linkedin-bot-ai.zip"
