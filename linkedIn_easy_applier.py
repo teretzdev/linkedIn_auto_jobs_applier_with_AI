@@ -559,75 +559,25 @@ class LinkedInEasyApplier:
         except Exception as e:
             print(f"Error clicking system button: {str(e)}")
 
-    def _click_device_button(self) -> None:
+    def _click_process_button(self) -> None:
         try:
-            device_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="device_applications"]')))
-            device_button.click()
-            print("Device button clicked.")
+            process_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="process_applications"]')))
+            process_button.click()
+            print("Process button clicked.")
         except TimeoutException:
-            print("Device button not found or not clickable.")
+            print("Process button not found or not clickable.")
         except Exception as e:
-            print(f"Error clicking device button: {str(e)}")
+            print(f"Error clicking process button: {str(e)}")
 
-    def _click_software_button(self) -> None:
+    def _click_method_button(self) -> None:
         try:
-            software_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="software_applications"]')))
-            software_button.click()
-            print("Software button clicked.")
+            method_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="method_applications"]')))
+            method_button.click()
+            print("Method button clicked.")
         except TimeoutException:
-            print("Software button not found or not clickable.")
+            print("Method button not found or not clickable.")
         except Exception as e:
-            print(f"Error clicking software button: {str(e)}")
-
-    def _click_business_method_button(self) -> None:
-        try:
-            business_method_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="business_method_applications"]')))
-            business_method_button.click()
-            print("Business method button clicked.")
-        except TimeoutException:
-            print("Business method button not found or not clickable.")
-        except Exception as e:
-            print(f"Error clicking business method button: {str(e)}")
-
-    def _click_data_structure_button(self) -> None:
-        try:
-            data_structure_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="data_structure_applications"]')))
-            data_structure_button.click()
-            print("Data structure button clicked.")
-        except TimeoutException:
-            print("Data structure button not found or not clickable.")
-        except Exception as e:
-            print(f"Error clicking data structure button: {str(e)}")
-
-    def _click_algorithm_button(self) -> None:
-        try:
-            algorithm_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="algorithm_applications"]')))
-            algorithm_button.click()
-            print("Algorithm button clicked.")
-        except TimeoutException:
-            print("Algorithm button not found or not clickable.")
-        except Exception as e:
-            print(f"Error clicking algorithm button: {str(e)}")
-
-    def _click_interface_button(self) -> None:
-        try:
-            interface_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="interface_applications"]')))
-            interface_button.click()
-            print("Interface button clicked.")
-        except TimeoutException:
-            print("Interface button not found or not clickable.")
-        except Exception as e:
-            print(f"Error clicking interface button: {str(e)}")
-
-    def _click_component_button(self) -> None:
-        try:
-            component_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="component_applications"]')))
-            component_button.click()
-            print("Component button clicked.")
-        except TimeoutException:
-            print("Component button not found or not clickable.")
-        except Exception as e:
-            print(f"Error clicking component button: {str(e)}")
+            print(f"Error clicking method button: {str(e)}")
 
     def _click_system_button(self) -> None:
         try:
@@ -675,4 +625,58 @@ class LinkedInEasyApplier:
             process_button.click()
             print("Process button clicked.")
         except TimeoutException:
-            print("Process button not found
+            print("Process button not found or not clickable.")
+        except Exception as e:
+            print(f"Error clicking process button: {str(e)}")
+
+    def _click_method_button(self) -> None:
+        try:
+            method_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="method_applications"]')))
+            method_button.click()
+            print("Method button clicked.")
+        except TimeoutException:
+            print("Method button not found or not clickable.")
+        except Exception as e:
+            print(f"Error clicking method button: {str(e)}")
+
+    def _click_system_button(self) -> None:
+        try:
+            system_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="system_applications"]')))
+            system_button.click()
+            print("System button clicked.")
+        except TimeoutException:
+            print("System button not found or not clickable.")
+        except Exception as e:
+            print(f"Error clicking system button: {str(e)}")
+
+    def _click_process_button(self) -> None:
+        try:
+            process_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="process_applications"]')))
+            process_button.click()
+            print("Process button clicked.")
+        except TimeoutException:
+            print("Process button not found or not clickable.")
+        except Exception as e:
+            print(f"Error clicking process button: {str(e)}")
+
+    def _click_method_button(self) -> None:
+        try:
+            method_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="method_applications"]')))
+            method_button.click()
+            print("Method button clicked.")
+        except TimeoutException:
+            print("Method button not found or not clickable.")
+        except Exception as e:
+            print(f"Error clicking method button: {str(e)}")
+
+    def _click_system_button(self) -> None:
+        try:
+            system_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="system_applications"]')))
+            system_button.click()
+            print("System button clicked.")
+        except TimeoutException:
+            print("System button not found or not clickable.")
+        except Exception as e:
+            print(f"Error clicking system button: {str(e)}")
+
+    def _click_process_button(self) -> None:
