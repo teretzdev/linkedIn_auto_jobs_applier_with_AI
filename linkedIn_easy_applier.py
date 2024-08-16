@@ -1,3 +1,5 @@
+from selenium.webdriver.common.by import By
+
 def _fill_additional_questions(self) -> None:
     form_sections = self.driver.find_elements(By.CLASS_NAME, 'jobs-easy-apply-form-section__grouping')
     for section in form_sections:
