@@ -128,5 +128,3 @@ class LinkedInEasyApplier:
             print("Back button not found or not clickable.")
         except Exception as e:
             print(f"Error clicking back button: {str(e)}")
-
-    def _
