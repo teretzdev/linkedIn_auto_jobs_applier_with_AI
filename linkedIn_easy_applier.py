@@ -26,7 +26,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from xhtml2pdf import pisa
 
-import utils    
+import utils
+
 
 class LinkedInEasyApplier:
     def __init__(self, driver: Any, resume_dir: Optional[str], set_old_answers: List[Tuple[str, str, str]], gpt_answerer: Any):
@@ -51,7 +52,6 @@ class LinkedInEasyApplier:
             tb_str = traceback.format_exc()
             self._discard_application()
             raise Exception(f"Failed to apply to job! Original exception: \nTraceback:\n{tb_str}")
-
 
     def _find_easy_apply_button(self) -> WebElement:
         buttons = WebDriverWait(self.driver, 10).until(
@@ -110,7 +110,6 @@ class LinkedInEasyApplier:
         time.sleep(random.uniform(3.0, 5.0))
         self._check_for_errors()
 
-
     def _unfollow_company(self) -> None:
         try:
             follow_checkbox = self.driver.find_element(
@@ -141,8 +140,6 @@ class LinkedInEasyApplier:
                 self._process_form_element(element)
         except Exception as e:
             pass
-        
-
 
     def _process_form_element(self, element: WebElement) -> None:
         try:
