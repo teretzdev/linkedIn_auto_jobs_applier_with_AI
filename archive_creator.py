@@ -19,6 +19,7 @@ def create_archive(dir_path, archive_name):
                 file_path = os.path.join(root, file)
                 arcname = os.path.relpath(file_path, dir_path)
                 zipf.write(file_path, arcname)
+                print(f"Added: {arcname}")
 
 # Example usage:
 dir_to_archive = "d:\\linkedin-bot-ai\\"
