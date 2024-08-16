@@ -24,6 +24,6 @@ def create_archive(dir_path, archive_name):
     print(f"Archive '{archive_name}' created successfully.")
 
 # Example usage:
-dir_to_archive = "/path/to/your/directory"
+dir_to_archive = "d:\\linkedin-bot-ai\\"
 archive_name = "your_archive_name.zip"
 create_archive(dir_to_archive, archive_name)
