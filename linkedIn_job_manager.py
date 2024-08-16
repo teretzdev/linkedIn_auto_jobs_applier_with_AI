@@ -34,6 +34,7 @@ class LinkedInJobManager:
         self.company_blacklist = parameters.get('companyBlacklist', []) or []
         self.title_blacklist = parameters.get('titleBlacklist', []) or []
         self.positions = parameters.get('positions', [])
-        self.locations = parameters
+        self.locations = parameters.get('locations', [])
     def set_gemini_answerer(self, gemini_answerer):
         self.gemini_answerer = gemini_answerer
+        self.easy_applier_component = LinkedInEasyApplier(self.driver, self.gemini_answerer)
