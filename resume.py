@@ -115,7 +115,7 @@ class Resume:
                     f"    Skills Acquired:\n{format_dict(exp.skillsAcquired)}"
                     for exp in self.experience_details
                 ) + "\n\n"
-                "Projects:\n" + "\n".join(f"  - {proj}" for proj in self.projects.values()) + "\n\n"
+                "Projects:\n" + "\n".join(f"  - {format_dict(proj)}" for proj in self.projects.values()) + "\n\n"
                 f"Availability: {self.availability.noticePeriod}\n\n"
                 f"Salary Expectations: {self.salary_expectations.salaryRangeUSD}\n\n"
                 "Certifications: " + ", ".join(self.certifications) + "\n\n"
