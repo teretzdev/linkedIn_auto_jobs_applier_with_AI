@@ -52,6 +52,7 @@ class LinkedInEasyApplier:
             for section in form_sections:
                 # Check if the section is the "projects" section
                 if "projects" in section.text.lower():
+                    print("Skipping 'projects' section.")
                     continue  # Skip processing this section
                 self._process_question(section)
         except NoSuchElementException:
