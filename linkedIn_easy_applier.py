@@ -679,4 +679,4 @@ class LinkedInEasyApplier:
         except Exception as e:
             print(f"Error clicking system button: {str(e)}")
 
-    def _click_process_button(self) -> None:
+    def _click_process_button(self
