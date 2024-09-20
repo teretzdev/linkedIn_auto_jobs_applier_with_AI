@@ -6,7 +6,6 @@ test*
 openaiSelenium*
 open_ai_calls.json
 _*
-data_folder*
 .venv
 generated_cv*
 resume.html
@@ -14,3 +13,5 @@ resume.html
 chrome_profile
 .aider*
 data_folder_example*
+node_modules
+your_env_name

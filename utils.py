@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 import glob
 from webdriver_manager.chrome import ChromeDriverManager
+import google.generativeai as genai
 
 # Updated import for Google Gemini
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -67,19 +68,18 @@ def HTML_to_PDF(FilePath):
     FilePath = f"file:///{os.path.abspath(FilePath).replace(os.sep, '/')}"
     
     # Using Gemini API to generate PDF
-    llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=os.environ.get("GOOGLE_API_KEY"))
+    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+    model = genai.GenerativeModel('gemini-1.5-pro-latest')
 
     with open(FilePath, 'r', encoding='utf-8') as f:
         html_content = f.read()
 
     # Use Gemini to generate a PDF from the HTML 
-    prompt = ChatPromptTemplate.from_template(
-        "Please convert the following HTML into a PDF format.\n\n{html}"
-    )
-    chain = LLMChain(llm=llm, prompt=prompt)
+    prompt = f"Please convert the following HTML into a PDF format and return the result as a base64 encoded string:\n\n{html_content}"
 
     try:
-        pdf_base64 = chain.run({"html": html_content})
+        response = model.generate_content(prompt)
+        pdf_base64 = response.text
         return pdf_base64
 
     except Exception as e:

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@huggingface/inference": "^2.8.0",
+    "cache": "^3.0.0",
+    "clean": "^4.0.2",
+    "npm": "^10.8.2",
+    "petals": "^0.1.1",
+    "transformers": "^3.1.0"
+  }
+}

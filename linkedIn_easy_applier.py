@@ -50,10 +50,6 @@ class LinkedInEasyApplier:
         try:
             form_sections = self.driver.find_elements(By.CLASS_NAME, 'jobs-easy-apply-form-section__grouping')
             for section in form_sections:
-                # Check if the section is the "projects" section
-                if "projects" in section.text.lower():
-                    print("Skipping 'projects' section.")
-                    continue  # Skip processing this section
                 self._process_question(section)
         except NoSuchElementException:
             print("No additional questions found.")

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict
 import yaml
+import logging
 
 @dataclass
 class PersonalInformation:
@@ -73,9 +74,8 @@ class SalaryExpectations:
 
 @dataclass
 class Language:
-    def __init__(self, name, proficiency):
-        self.name = name
-        self.proficiency = proficiency
+    language: str
+    proficiency: str
 
 class Resume:
     def __init__(self, yaml_str: str):
@@ -91,13 +91,7 @@ class Resume:
             self.availability = Availability(**data['availability'])
             self.salary_expectations = SalaryExpectations(**data['salary_expectations'])
             self.certifications = data['certifications']
-            self.languages = []
-            for lang in data.get('languages', []):
-                if isinstance(lang, dict):
-                    self.languages.append(Language(lang['name'], lang['proficiency']))
-                else:
-                    # If proficiency is not provided, you can set a default value
-                    self.languages.append(Language(lang, 'Not specified'))
+            self.languages = [Language(**lang) for lang in data['languages']]
             self.interests = data['interests']
         except yaml.YAMLError as e:
             raise ValueError(f"Invalid YAML format in resume file: {e}")
@@ -138,11 +132,23 @@ class Resume:
                 "Interests:\n" + ", ".join(self.interests)
             )
 
-import logging
+# Main script
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
 
-# Define plain_text_resume_file before using it
-with open(r'D:\linkedin-bot-ai\linkedIn_auto_jobs_applier_with_AI\data_folder\plain_text_resume.yaml', 'r') as file:
-    plain_text_resume_file = file.read()
+    # Replace 'path/to/your/plain_text_resume.yaml' with the actual path to your YAML file
+    yaml_file_path = 'path/to/your/plain_text_resume.yaml'
 
-logging.debug(f"Resume YAML content: {plain_text_resume_file[:100]}...")  # Log first 100 characters
-resume_object = Resume(plain_text_resume_file)
+    try:
+        with open(yaml_file_path, 'r') as file:
+            plain_text_resume_file = file.read()
+
+        logging.debug(f"Resume YAML content: {plain_text_resume_file[:100]}...")  # Log first 100 characters
+        resume_object = Resume(plain_text_resume_file)
+        print(resume_object)
+    except FileNotFoundError:
+        logging.error(f"Resume YAML file not found: {yaml_file_path}")
+    except ValueError as e:
+        logging.error(f"Error parsing resume YAML: {e}")
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")

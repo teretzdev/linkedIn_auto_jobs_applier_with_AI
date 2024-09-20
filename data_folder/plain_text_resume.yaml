@@ -1,15 +1,20 @@
 personal_information:
-  name: "[Your name]"
+  name: "Jason James"
+  email: "teretz@gmail.com"
+  phone: "(314) 467 0696"
   surname: "[Your surname]"
-  dateOfBirth: "[Your Date of Birth]"
-  country: "[Your country]"
-  city: "[Your city]"
-  address: "[Your address]"
+  dateOfBirth: "July 6th, 1979"
+  country: "United States"
+  city: "Saint Louis, MO"
+  address: "1575 Bluefield Dr. 63033"
   phonePrefix: "[Your phone number prefix]"
-  phone: "[Your phone number]"
-  email: "[Your email]"
   github: "[Link]"
-  linkedin: "[Link]"
+  linkedin: "https://www.linkedin.com/in/lord-teretz/"
+
+
+projects:
+  project1: "[Description of significant projects you've worked on + if available repo link]"
+  project2: "[Description of significant projects you've worked on + if available repo link]"
 
 self_identification:
   gender: "[Specific gender identification]"
@@ -18,7 +23,9 @@ self_identification:
   disability: [true/false]
   ethnicity: "[Specify ethnicity]"
 
+
 legal_authorization:
+  # (Work authorization details not explicitly mentioned in the resume)
   euWorkAuthorization: [true/false]
   usWorkAuthorization: [true/false]
   requiresUsVisa: [true/false]
@@ -29,6 +36,7 @@ legal_authorization:
   requiresEuSponsorship: [true/false]
 
 work_preferences:
+  # (Preferences not explicitly mentioned, but can be inferred based on experience)
   remoteWork: [true/false]
   inPersonWork: [true/false]
   openToRelocation: [true/false]
@@ -51,53 +59,235 @@ education_details:
       yourSkill: "[Years]"
       yourSkill: "[Years]"
 
-experience_details:
-  - position: "[Job Title]"
-    company: "[Company Name]"
-    employmentPeriod: "[Month, Year] - [Month, Year]"
-    location: "[City, Country]"
-    industry: "[Industry of the Company]"
-    keyResponsibilities:
-      responsibility1: "[Description of responsibility1]"
-      responsibility2: "[Description of responsibility1]"
-      responsibility3: "[Description of responsibility1]"
-    skillsAcquired:
-      leadership: "[Years]"
-      problemSolving: "[Years]"
-      criticalThinking: "[Years]"
-      adaptability: "[Years]"
-      perfectionism: "[Years]"
-      yourSkill: "[Years]"
-      yourSkill: "[Years]"
-
-projects:
-  project1: "[Description of significant projects you've worked on + if available repo link]"
-  project2: "[Description of significant projects you've worked on + if available repo link]"
 
 availability:
-  noticePeriod: "[Specify notice period]"
+  noticePeriod: "2 Weeks"
 
 salary_expectations:
-  salaryRangeUSD: "[Specify your salary expectations in USD]"
+  salaryRangeUSD: "115,000-150,000"
 
 certifications:
   - "[Certification 1]"
   - "[Certification 2]"
   - "[Certification 3]"
 
-skills:
-  problemSolving: "[Years]"
-  criticalThinking: "[Years]"
-  adaptability: "[Years]"
-  perfectionism: "[Years]"
-  yourSkill: "[Years]"
-  yourSkill: "[Years]"
-
 languages:
-  - language: "Italian"
-    proficiency: "Native"
   - language: "English"
-    proficiency: "Professional"
+    proficiency: "Native"
 
 interests:
   - "[List any hobbies or interests relevant to your professional profile]"
+
+experience_details:
+  - position: "Web Developer"
+    company: "Over Internet"
+    employmentPeriod: "November 2006 - Present"
+    location: "Remote"
+    industry: "Web Development"
+    keyResponsibilities:
+      - "Develop mobile applications, graphics, websites, flash sites, video games, and web-based application designs."
+      - "Code and edit HTML, JavaScript, PHP, XML, and Flash."
+      - "Upgrade offline databases to online and script transmission methods."
+      - "Troubleshoot and fix web browser compatibility issues."
+    skillsAcquired:
+      - "Web development"
+      - "Mobile app development"
+      - "Database management"
+      - "Troubleshooting"
+
+  - position: "Senior Web Developer"
+    company: "Blayzer / Phat Buddha Productions"
+    employmentPeriod: "October 2013 - July 2014"
+    location: "Saint Louis, MO"
+    industry: "Web Development"
+    keyResponsibilities:
+      - "Worked on around 25 different projects."
+      - "Expanded CMS skillset to include Magento, OpenCart, and Exponent."
+      - "Sliced PSDs and made custom components in various CMS."
+      - "Created websites singlehandedly."
+    skillsAcquired:
+      - "CMS development"
+      - "Web design"
+      - "Project management"
+
+  - position: "Freelance Web Developer/Game Developer/Consultant"
+    company: "Teretz Studios/O'Dell's Irish Pub"
+    employmentPeriod: "November 2011 - March 2013"
+    location: "Eureka, MO"
+    industry: "Web Development & Game Development"
+    keyResponsibilities:
+      - "Experimented with porting from C# to Javascript in Unity 3D."
+      - "Built nine small games compatible with Facebook, Droid, and iPad."
+      - "Created an MMO sandbox environment with a modified Roar framework."
+    skillsAcquired:
+      - "Game development"
+      - "Cross-platform development"
+      - "Framework modification"
+
+  - position: "Web Designer/Tech/Workflow Consultant/Graphic Designer"
+    company: "B&B Enterprise Holding"
+    employmentPeriod: "October 2010 - November 2011"
+    location: "Clayton, MO"
+    industry: "Web Design & IT Consulting"
+    keyResponsibilities:
+      - "Developed graphics, websites, and templates."
+      - "Created video commercials, email blast campaigns, and blogs."
+      - "Built a custom CRM utility suite."
+      - "Maintained networks, workstations, and handled technology requests."
+    skillsAcquired:
+      - "Graphic design"
+      - "CRM development"
+      - "IT support"
+
+  - position: "Flash and Web Developer"
+    company: "Odesk.com"
+    employmentPeriod: "September 2009 - Present"
+    location: "Remote"
+    industry: "Web Development"
+    keyResponsibilities:
+      - "Developed Flash sites and games."
+      - "Edited preexisting websites."
+      - "Hand-coded XML, PHP, and MySQL for CMS."
+    skillsAcquired:
+      - "Flash development"
+      - "CMS development"
+
+  - position: "Game Developer"
+    company: "VooDoo Gaming"
+    employmentPeriod: "September 2009 - Present"
+    location: "Remote"
+    industry: "Game Development"
+    keyResponsibilities:
+      - "Programmed in GML."
+      - "Coordinated with Maya and 3DS artists."
+    skillsAcquired:
+      - "Game programming"
+      - "Team collaboration"
+
+  - position: "Lead Website Designer"
+    company: "Level 5 Web Design"
+    employmentPeriod: "July 2008 - August 2009"
+    location: "St. Louis, MO"
+    industry: "Web Design"
+    keyResponsibilities:
+      - "Built websites and designed all graphics."
+      - "Interacted with clients on project details."
+      - "Created JavaScript animations and functionality."
+      - "Used PHP, MySQL, and scripts to audit employee time and internet usage."
+      - "Interviewed and hired staff."
+    skillsAcquired:
+      - "Client interaction"
+      - "JavaScript development"
+      - "Staff management"
+
+  - position: "Dispatch Supervisor/Web Admin"
+    company: "Express Worldwide/Today Express/Pharmacy Express"
+    employmentPeriod: "March 2008 - July 2009"
+    location: "St. Louis, MO"
+    industry: "Logistics & Web Administration"
+    keyResponsibilities:
+      - "Designed functionality for a website."
+      - "Understood and worked with 50 PHP scripts."
+      - "Designed admin panel, tracking system, forms, and web hosting."
+      - "Updated website content and implemented MySQL database."
+      - "Dealt with clients and troubleshooted server issues."
+      - "Implemented a mail merger system."
+    skillsAcquired:
+      - "Web administration"
+      - "Client management"
+      - "Server management"
+
+  - position: "Computer Technician/Repair"
+    company: "St. Clair Computer Repair"
+    employmentPeriod: "December 2004 - July 2006"
+    location: "St. Clair, MO"
+    industry: "Computer Repair"
+    keyResponsibilities:
+      - "Repaired, maintained, and installed computer hardware and software."
+      - "Troubleshooted hardware and software issues."
+      - "Built computers, installed OS, and replaced malfunctioning parts."
+      - "Designed specialty computers."
+    skillsAcquired:
+      - "Hardware repair"
+      - "Software troubleshooting"
+      - "Computer building"
+
+skills:
+  - technical_skills:
+      - "2D/3D Graphic Design"
+      - "Editing"
+      - "Animation"
+      - "Programming"
+      - "Scripting"
+      - "Software Automation"
+      - "Web Browser/network forensics"
+      - "Web design"
+      - "Audio Production"
+      - "Recording"
+      - "Mastering"
+      - "Audio Manipulation"
+      - "Computer Diagnostics"
+      - "Repair"
+      - "Maintenance"
+      - "Mobile Apps"
+      - "3D Rigging Animation"
+  - soft_skills: 
+      - "UI design"
+      - "Web architecture"
+      - "Project planning"
+      - "Reverse software engineering"
+      - "Client communication"
+      - "Team collaboration"
+      - "Problem-solving"
+
+languages:
+  - "PHP"
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+  - "jQuery"
+  - "MySQL"
+  - "Ajax"
+  - "Actionscript3"
+  - "C#"
+  - "C++"
+  - "Visual Basic"
+  - "GML"
+
+software:
+  - "Flash MX - CS6"
+  - "Pixel Bender"
+  - "Unity3D 5 - 3.5.2"
+  - "Photoshop v3.0 - CS5.5"
+  - "GIMP"
+  - "DreamWeaver CS5"
+  - "Visual C++"
+  - "Visual C#"
+  - "3DS Max"
+  - "Plasma"
+  - "Blender"
+  - "Rhino3D"
+  - "Solidworks"
+  - "Truespace"
+  - "Acid"
+  - "Cooledit"
+  - "Abelton Live"
+  - "Adobe Audition"
+  - "ProTools"
+  - "Fruityloops"
+  - "Reason"
+  - "ReWire"
+  - "VST plugins"
+  - "Massive"
+  - "Traktor"
+  - "Wordpress"
+  - "CodeIgniter"
+  - "Fury"
+  - "Roar"
+  - "Flixel"
+  - "Rain {Indie}"
+  - "Mono"
+  - "Urban Airship"
+  - "Mecanim"
+
+#

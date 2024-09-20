@@ -181,7 +181,7 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
         bot = LinkedInBotFacade(login_component, apply_component)
         bot.set_secrets(email, password)
         bot.set_resume(resume_object)
-        bot.set_gpt_answerer(gpt_answerer_component)
+        bot.set_gemini_answerer(gpt_answerer_component)
         bot.set_parameters(parameters)
         bot.start_login()
         bot.start_apply()
