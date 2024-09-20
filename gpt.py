@@ -56,25 +56,135 @@ class GPTAnswerer:
 
     @staticmethod
     def find_best_match(text: str, options: list[str]) -> str:
-        similarity_scores = [
-            len(set(text.lower().split()) & set(option.lower().split()))
-            for option in options
+        distances = [
+            (option, distance(text.lower(), option.lower())) for option in options
         ]
         best_match_index = similarity_scores.index(max(similarity_scores))
         return options[best_match_index]
+
+    @staticmethod
+    def _remove_placeholders(text: str) -> str:
+        text = text.replace("PLACEHOLDER", "")
+        return text.strip()
+
+    @staticmethod
+    def _preprocess_template_string(template: str) -> str:
+        # Preprocess a template string to remove unnecessary indentation.
+        return textwrap.dedent(template)
 
     def set_resume(self, resume):
         self.resume = resume
 
     def summarize_job_description(self, text: str) -> str:
-        prompt = f"""
-        Ignore irrelevant information like benefits, perks, company culture, and only very concisely summarize the job description, focusing on the required skills and experience.
-        Text: {text}
-        """
-        return self.llm_cheap([HumanMessage(content=prompt)])['output']['output']
+        strings.summarize_prompt_template = self._preprocess_template_string(
+            strings.summarize_prompt_template
+        )
+        prompt = ChatPromptTemplate.from_template(strings.summarize_prompt_template)
+        chain = prompt | self.llm_cheap | StrOutputParser()
+        output = chain.invoke({"text": text})
+        return output
+    
 
-    def extract_number_from_string(self, output_str: str):
-        match = re.search(r'\d+', output_str)
-        if match:
-            return int(match.group())
-        return None
+    def get_resume_html(self):
+        resume_markdown_prompt = ChatPromptTemplate.from_template(strings.resume_markdown_template)
+        fusion_job_description_resume_prompt = ChatPromptTemplate.from_template(strings.fusion_job_description_resume_template)
+        resume_markdown_chain = resume_markdown_prompt | self.llm_cheap | StrOutputParser()
+        fusion_job_description_resume_chain = fusion_job_description_resume_prompt | self.llm_cheap | StrOutputParser()
+        
+        casual_markdown_path = os.path.abspath("resume_template/casual_markdown.js")
+        reorganize_header_path = os.path.abspath("resume_template/reorganizeHeader.js")
+        resume_css_path = os.path.abspath("resume_template/resume.css")
+
+        html_template = strings.html_template.format(casual_markdown=casual_markdown_path, reorganize_header=reorganize_header_path, resume_css=resume_css_path)
+        composed_chain = (
+            resume_markdown_chain
+            | (lambda output: {"job_description": self.job.summarize_job_description, "formatted_resume": output})
+            | fusion_job_description_resume_chain
+            | (lambda formatted_resume: html_template + formatted_resume)
+        )
+        try:
+            output = composed_chain.invoke({
+                "resume": self.resume,
+                "job_description": self.job.summarize_job_description
+            })
+            return output
+        except Exception as e:
+            #print(f"Error during elaboration: {e}")
+            pass
+        
+
+    def _create_chain(self, template: str):
+        prompt = ChatPromptTemplate.from_template(template)
+        return prompt | self.llm_cheap | StrOutputParser()
+
+    def answer_question_textual_wide_range(self, question: str) -> str:
+        # Define chains for each section of the resume
+        chains = {
+            "personal_information": self._create_chain(strings.personal_information_template),
+            "self_identification": self._create_chain(strings.self_identification_template),
+            "legal_authorization": self._create_chain(strings.legal_authorization_template),
+            "work_preferences": self._create_chain(strings.work_preferences_template),
+            "education_details": self._create_chain(strings.education_details_template),
+            "experience_details": self._create_chain(strings.experience_details_template),
+            "projects": self._create_chain(strings.projects_template),
+            "availability": self._create_chain(strings.availability_template),
+            "salary_expectations": self._create_chain(strings.salary_expectations_template),
+            "certifications": self._create_chain(strings.certifications_template),
+            "languages": self._create_chain(strings.languages_template),
+            "interests": self._create_chain(strings.interests_template),
+            "cover_letter": self._create_chain(strings.coverletter_template),
+        }
+        section_prompt = (
+            f"For the following question: '{question}', which section of the resume is relevant? "
+            "Respond with one of the following: Personal information, Self Identification, Legal Authorization, "
+            "Work Preferences, Education Details, Experience Details, Projects, Availability, Salary Expectations, "
+            "Certifications, Languages, Interests, Cover letter"
+        )
+        prompt = ChatPromptTemplate.from_template(section_prompt)
+        chain = prompt | self.llm_cheap | StrOutputParser()
+        output = chain.invoke({"question": question})
+        section_name = output.lower().replace(" ", "_")
+        if section_name == "cover_letter":
+            chain = chains.get(section_name)
+            output= chain.invoke({"resume": self.resume, "job_description": self.job_description})
+            return output
+        resume_section = getattr(self.resume, section_name, None)
+        if resume_section is None:
+            raise ValueError(f"Section '{section_name}' not found in the resume.")
+        chain = chains.get(section_name)
+        if chain is None:
+            raise ValueError(f"Chain not defined for section '{section_name}'")
+        return chain.invoke({"resume_section": resume_section, "question": question})
+
+    def answer_question_textual(self, question: str) -> str:
+        template = self._preprocess_template_string(strings.resume_stuff_template)
+        prompt = ChatPromptTemplate.from_template(template)
+        chain = prompt | self.llm_cheap | StrOutputParser()
+        output = chain.invoke({"resume": self.resume, "question": question})
+        return output
+
+    def answer_question_numeric(self, question: str, default_experience: int = 3) -> int:
+        func_template = self._preprocess_template_string(strings.numeric_question_template)
+        prompt = ChatPromptTemplate.from_template(func_template)
+        chain = prompt | self.llm_cheap | StrOutputParser()
+        output_str = chain.invoke({"resume": self.resume, "question": question, "default_experience": default_experience})
+        try:
+            output = self.extract_number_from_string(output_str)
+        except ValueError:
+            output = default_experience
+        return output
+
+    def extract_number_from_string(self, output_str):
+        numbers = re.findall(r"\d+", output_str)
+        if numbers:
+            return int(numbers[0])
+        else:
+            raise ValueError("No numbers found in the string")
+
+    def answer_question_from_options(self, question: str, options: list[str]) -> str:
+        func_template = self._preprocess_template_string(strings.options_template)
+        prompt = ChatPromptTemplate.from_template(func_template)
+        chain = prompt | self.llm_cheap | StrOutputParser()
+        output_str = chain.invoke({"resume": self.resume, "question": question, "options": options})
+        best_option = self.find_best_match(output_str, options)
+        return best_option

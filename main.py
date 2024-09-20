@@ -68,14 +68,10 @@ class ConfigValidator:
         except FileNotFoundError:
             raise ConfigError(f"Config file not found: {config_yaml_path}")
         
-        # Validate 'remote'
-        if 'remote' not in parameters or not isinstance(parameters['remote'], bool):
-            raise ConfigError(f"'remote' in config file {config_yaml_path} must be a boolean value.")
 
-        # Validate 'experienceLevel'
-        experience_level = parameters.get('experienceLevel', {})
-        valid_experience_levels = [
-            'internship', 'entry', 'associate', 'mid-senior level', 'director', 'executive'
+        mandatory_params = [
+            'remote', 'experienceLevel',
+            'jobTypes', 'date', 'positions', 'locations', 'distance'
         ]
         for level in valid_experience_levels:
             if level not in experience_level or not isinstance(experience_level[level], bool):
@@ -145,9 +141,9 @@ class ConfigValidator:
         if not ConfigValidator.validate_email(secrets['email']):
             raise ConfigError(f"Invalid email format in secrets file {secrets_yaml_path}.")
         if not secrets['password']:
-            raise ConfigError(f"Password cannot be empty in secrets file {secrets_yaml_path}.")
-        if not secrets['gemini_api_key']:
-            raise ConfigError(f"Gemini API key cannot be empty in secrets file {secrets_yaml_path}.")
+            raise ConfigError("Password cannot be empty in secrets file.")
+        if not secrets['openai_api_key']:
+            raise ConfigError("OpenAI API key cannot be empty in secrets file.")
 
         return secrets['email'], str(secrets['password']), secrets['gemini_api_key']
 
@@ -220,8 +216,9 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
         browser = init_browser()
         wait = WebDriverWait(browser, 10)  # Add this line
         login_component = LinkedInAuthenticator(browser)
-        apply_component = LinkedInJobManager(browser, wait)  # Update this line
-        gemini_answerer_component = GeminiAnswerer(gemini_api_key)
+        apply_component = LinkedInJobManager(browser)
+        gpt_answerer_component = GPTAnswerer(openai_api_key)
+
         with open(parameters['uploads']['plainTextResume'], "r") as file:
             plain_text_resume_file = file.read()
         resume_object = Resume(plain_text_resume_file)

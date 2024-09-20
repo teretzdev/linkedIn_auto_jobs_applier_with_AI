@@ -61,30 +61,6 @@ def scroll_slow(driver, scrollable_element, start=0, end=3600, step=100, reverse
     except Exception as e:
         print(f"Exception occurred: {e}")
 
-def HTML_to_PDF(FilePath):
-    # Validate and prepare file paths
-    if not os.path.isfile(FilePath):
-        raise FileNotFoundError(f"The specified file does not exist: {FilePath}")
-    FilePath = f"file:///{os.path.abspath(FilePath).replace(os.sep, '/')}"
-    
-    # Using Gemini API to generate PDF
-    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-    model = genai.GenerativeModel('gemini-1.5-pro-latest')
-
-    with open(FilePath, 'r', encoding='utf-8') as f:
-        html_content = f.read()
-
-    # Use Gemini to generate a PDF from the HTML 
-    prompt = f"Please convert the following HTML into a PDF format and return the result as a base64 encoded string:\n\n{html_content}"
-
-    try:
-        response = model.generate_content(prompt)
-        pdf_base64 = response.text
-        return pdf_base64
-
-    except Exception as e:
-        raise RuntimeError(f"Error generating PDF: {e}")
-
 def chromeBrowserOptions():
     options = webdriver.ChromeOptions()
     options.add_argument('--no-sandbox')
@@ -100,30 +76,12 @@ def chromeBrowserOptions():
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_experimental_option('useAutomationExtension', False)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    
-    # Ensure that the Chrome profile directory exists
-    ensure_chrome_profile()
-
-    if len(chromeProfilePath) > 0:
-        initialPath = os.path.dirname(chromeProfilePath)
-        profileDir = os.path.basename(chromeProfilePath)
-        options.add_argument('--user-data-dir=' + initialPath)
-        options.add_argument("--profile-directory=" + profileDir)
+    if(len(chromeProfilePath)>0):
+        initialPath = chromeProfilePath[0:chromeProfilePath.rfind("/")]
+        profileDir = chromeProfilePath[chromeProfilePath.rfind("/")+1:]
+        options.add_argument('--user-data-dir=' +initialPath)
+        options.add_argument("--profile-directory=" +profileDir)
     else:
         options.add_argument("--incognito")
         
     return options
-
-def printred(text):
-    # ANSI color code for red
-    RED = "\033[91m"
-    RESET = "\033[0m"
-    # Print the text in red
-    print(f"{RED}{text}{RESET}")
-
-def printyellow(text):
-    # ANSI color code for yellow
-    YELLOW = "\033[93m"
-    RESET = "\033[0m"
-    # Print the text in yellow
-    print(f"{YELLOW}{text}{RESET}")
