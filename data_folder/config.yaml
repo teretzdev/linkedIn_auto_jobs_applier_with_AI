@@ -1,27 +1,27 @@
 remote: true
 
 experienceLevel:
- entry: true
- associate: false
- mid: true
- senior: false
- director: false
- executive: false
+  entry: true
+  associate: false
+  mid: true
+  senior: false
+  director: false
+  executive: false
 
 jobTypes:
- full-time: true
- contract: true
- part-time: true
- temporary: true
- internship: false
- other: true
- volunteer: false
+  full-time: true
+  contract: true
+  part-time: true
+  temporary: true
+  internship: false
+  other: true
+  volunteer: false
 
 date:
- all time: true
- month: true
- week: true
- 24 hours: true
+  all_time: true
+  month: true
+  week: true
+  24_hours: true
 
 positions:
   - Software developer
@@ -45,3 +45,4 @@ titleBlacklist:
   - word2
 
 credentialsFilePath: "data_folder/secrets.yaml"  # Path to the secrets file containing credentials
+

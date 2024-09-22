@@ -4,7 +4,8 @@ experienceLevel:
   internship: true
   entry: false
   associate: true
-  mid-senior level: false
+  mid: false
+  senior: false
   director: true
   executive: false
 
@@ -18,10 +19,10 @@ jobTypes:
   volunteer: true
 
 date:
-  all time: false
+  all_time: false
   month: true
   week: false
-  24 hours: true
+  24_hours: true
 
 positions:
   - Software developer
@@ -36,3 +37,4 @@ companyBlacklist:
   - Crossover
 
 titleBlacklist:
+

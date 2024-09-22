@@ -28,11 +28,8 @@ class ConfigValidator:
         try:
             with open(config_yaml_path, 'r') as stream:
                 parameters = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
+        except (yaml.YAMLError, FileNotFoundError) as exc:
             raise ConfigError(f"Error reading config file {config_yaml_path}: {exc}")
-        except FileNotFoundError:
-            raise ConfigError(f"Config file not found: {config_yaml_path}")
-        
 
         # Validate 'remote'
         if 'remote' not in parameters or not isinstance(parameters['remote'], bool):
@@ -41,7 +38,7 @@ class ConfigValidator:
         # Validate 'experienceLevel'
         experience_level = parameters.get('experienceLevel', {})
         valid_experience_levels = [
-            'internship', 'entry', 'associate', 'mid-senior level', 'director', 'executive'
+            'internship', 'entry', 'associate', 'mid', 'senior', 'director', 'executive'
         ]
         for level in valid_experience_levels:
             if level not in experience_level or not isinstance(experience_level[level], bool):
@@ -58,7 +55,7 @@ class ConfigValidator:
 
         # Validate 'date'
         date = parameters.get('date', {})
-        valid_dates = ['all time', 'month', 'week', '24 hours']
+        valid_dates = ['all_time', 'month', 'week', '24_hours']
         for date_filter in valid_dates:
             if date_filter not in date or not isinstance(date[date_filter], bool):
                 raise ConfigError(f"Date filter '{date_filter}' must be a boolean value in config file {config_yaml_path}.")
@@ -217,3 +214,4 @@ def main(resume: Path = None):
 
 if __name__ == "__main__":
     main()
+

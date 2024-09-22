@@ -26,9 +26,13 @@ logging.basicConfig(
 def get_gemini_response(prompt):
     logging.debug(f"Generating response for prompt: {prompt}")
     model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content(prompt)
-    logging.debug(f"Received response: {response.text}")
-    return response.text
+    try:
+        response = model.generate_content(prompt)
+        logging.debug(f"Received response: {response.text}")
+        return response.text
+    except Exception as e:
+        logging.error(f"Error generating response: {e}")
+        return None
 
 # Remove the following import:
 # from langchain_google_genai import ChatGoogleGenerativeAI
@@ -79,8 +83,10 @@ def scroll_slow(driver, scrollable_element, start=0, end=3600, step=100, reverse
                 try:
                     driver.execute_script(script_scroll_to, scrollable_element, position)
                     logging.debug(f"Scrolled to position {position}")
+                except WebDriverException as e:
+                    logging.error(f"WebDriverException during scrolling to {position}: {e}")
                 except Exception as e:
-                    logging.error(f"Error during scrolling to {position}: {e}")
+                    logging.error(f"Unexpected error during scrolling to {position}: {e}")
                 time.sleep(random.uniform(1.0, 2.6))
             driver.execute_script(script_scroll_to, scrollable_element, end)
             logging.debug(f"Scrolled to end position {end}")
@@ -94,9 +100,13 @@ def chromeBrowserOptions():
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     # Use relative path to avoid absolute path duplication
-    options.add_argument(f"user-data-dir={os.path.join(os.getcwd(), 'chrome_profile', 'linkedin_profile')}")
-    logging.debug(f"Chrome options set with user-data-dir={options.arguments[-1]}")
+    try:
+        options.add_argument(f"user-data-dir={os.path.join(os.getcwd(), 'chrome_profile', 'linkedin_profile')}")
+        logging.debug(f"Chrome options set with user-data-dir={options.arguments[-1]}")
+    except Exception as e:
+        logging.error(f"Error setting Chrome options: {e}")
     return options
 
 def printyellow(text: str) -> None:
     logging.warning(text)  # Using logging.warning for yellow-like output
+

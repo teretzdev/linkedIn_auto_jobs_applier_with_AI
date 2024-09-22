@@ -46,24 +46,50 @@ class GeminiAnswerer:
         self.resume = resume
 
     def answer_question_textual_wide_range(self, question: str) -> str:
-        prompt = f"Based on the resume information:\n{self.resume}\n\nAnswer the following question: {question}"
+        prompt = f"Based on the resume information:
+{self.resume}
+
+Answer the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_numeric(self, question: str) -> str:
-        prompt = f"Based on the resume information:\n{self.resume}\n\nProvide a numeric answer to the following question: {question}"
+        prompt = f"Based on the resume information:
+{self.resume}
+
+Provide a numeric answer to the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_from_options(self, question: str, options: list) -> str:
-        options_str = "\n".join(f"- {option}" for option in options)
-        prompt = f"Based on the resume information:\n{self.resume}\n\nAnswer the following question by selecting the best option:\n{question}\n\nOptions:\n{options_str}"
+        options_str = "
+".join(f"- {option}" for option in options)
+        prompt = f"Based on the resume information:
+{self.resume}
+
+Answer the following question by selecting the best option:
+{question}
+
+Options:
+{options_str}"
         return self.generate_answer(prompt)
 
     def try_fix_answer(self, question: str, previous_answer: str, error_text: str) -> str:
-        prompt = f"Based on the resume information:\n{self.resume}\n\nThe following question was asked: {question}\n\nThe previous answer was: {previous_answer}\n\nThis resulted in an error: {error_text}\n\nPlease provide a corrected answer that addresses the error."
+        prompt = f"Based on the resume information:
+{self.resume}
+
+The following question was asked: {question}
+
+The previous answer was: {previous_answer}
+
+This resulted in an error: {error_text}
+
+Please provide a corrected answer that addresses the error."
         return self.generate_answer(prompt)
 
     def get_resume_html(self) -> str:
-        prompt = f"Based on the resume information:\n{self.resume}\n\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
+        prompt = f"Based on the resume information:
+{self.resume}
+
+Generate an HTML version of this resume that is suitable for uploading to job application websites."
         return self.generate_answer(prompt)
 
 class ConfigValidator:
@@ -256,12 +282,12 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
         browser = init_browser()
         wait = WebDriverWait(browser, 10)
         
-        # Initialize GPTAnswerer (ensure correct arguments)
+        # Initialize GPTAnswerer with correct API keys
         gpt_answerer_component = GPTAnswerer(
-            openai_api_key=parameters.get('openai_api_key'),
+            openai_api_key=parameters.get('openai_api_key', ''),
             google_api_key=gemini_api_key
         )
-        logging.debug("GPTAnswerer initialized")
+        logging.debug("GPTAnswerer initialized with provided API keys")
         
         login_component = LinkedInAuthenticator(browser)
         logging.debug("LinkedInAuthenticator initialized")
@@ -278,7 +304,7 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
         resume_object = Resume(plain_text_resume_file)
         logging.debug("Resume object created")
         
-        # Pass browser as the third argument to LinkedInBotFacade
+        # Initialize LinkedInBotFacade with all components
         bot = LinkedInBotFacade(login_component, apply_component, browser)
         logging.debug("LinkedInBotFacade initialized")
         
@@ -340,3 +366,4 @@ def main(resume: Path = None):
 if __name__ == "__main__":
     logging.debug("Starting the application")
     main()
+

@@ -1,10 +1,10 @@
 import os
 import re
-from typing import Dict
+from typing import Dict, List
 
 from google.api_core import retry
 from google.cloud import aiplatform
-from langchain_community.chat_models import ChatGooglePalm  # Import from langchain-community
+from langchain_community.chat_models import ChatGooglePalm, ChatPromptTemplate, StrOutputParser  # Import from langchain-community
 from langchain.schema import (
     AIMessage,
     HumanMessage,
@@ -45,16 +45,16 @@ class GPTAnswerer:
     # self.google_api_key = google_api_key
 
     def _query_gemini(self, prompts):
-        response = self.endpoint.generate_content(instances=[{"content": prompts[0].content}])
-        return {'output': {'output': response.predictions[0]["content"]}}
+        response = genai.generate_content(prompt=prompts[0].content)
+        return {'output': {'output': response['text']}}
 
     @staticmethod
     def find_best_match(text: str, options: list[str]) -> str:
-        distances = [
-            (option, distance(text.lower(), option.lower())) for option in options
+        similarity_scores = [
+            (option, self._calculate_similarity(text.lower(), option.lower())) for option in options
         ]
-        best_match_index = similarity_scores.index(max(similarity_scores))
-        return options[best_match_index]
+        best_match = max(similarity_scores, key=lambda x: x[1])[0]
+        return best_match
 
     @staticmethod
     def _remove_placeholders(text: str) -> str:
@@ -64,19 +64,17 @@ class GPTAnswerer:
     @staticmethod
     def _preprocess_template_string(template: str) -> str:
         # Preprocess a template string to remove unnecessary indentation.
-        return textwrap.dedent(template)
+        return template.strip()
 
     def set_resume(self, resume):
         self.resume = resume
 
     def summarize_job_description(self, text: str) -> str:
-        strings.summarize_prompt_template = self._preprocess_template_string(
-            strings.summarize_prompt_template
-        )
-        prompt = ChatPromptTemplate.from_template(strings.summarize_prompt_template)
+        template = self._preprocess_template_string(strings.summarize_prompt_template)
+        prompt = ChatPromptTemplate.from_template(template)
         chain = prompt | self.llm_cheap | StrOutputParser()
         output = chain.invoke({"text": text})
-        return output
+        return output['text']
     
 
     def get_resume_html(self):
@@ -92,19 +90,19 @@ class GPTAnswerer:
         html_template = strings.html_template.format(casual_markdown=casual_markdown_path, reorganize_header=reorganize_header_path, resume_css=resume_css_path)
         composed_chain = (
             resume_markdown_chain
-            | (lambda output: {"job_description": self.job.summarize_job_description, "formatted_resume": output})
+            | (lambda output: {"job_description": self.summarize_job_description, "formatted_resume": output})
             | fusion_job_description_resume_chain
             | (lambda formatted_resume: html_template + formatted_resume)
         )
         try:
             output = composed_chain.invoke({
                 "resume": self.resume,
-                "job_description": self.job.summarize_job_description
+                "job_description": self.summarize_job_description(self.resume)
             })
-            return output
+            return output['text']
         except Exception as e:
-            #print(f"Error during elaboration: {e}")
-            pass
+            print(f"Error during elaboration: {e}")
+            return None
         
 
     def _create_chain(self, template: str):
@@ -155,7 +153,7 @@ class GPTAnswerer:
         prompt = ChatPromptTemplate.from_template(template)
         chain = prompt | self.llm_cheap | StrOutputParser()
         output = chain.invoke({"resume": self.resume, "question": question})
-        return output
+        return output['text']
 
     def answer_question_numeric(self, question: str, default_experience: int = 3) -> int:
         func_template = self._preprocess_template_string(strings.numeric_question_template)
@@ -163,7 +161,7 @@ class GPTAnswerer:
         chain = prompt | self.llm_cheap | StrOutputParser()
         output_str = chain.invoke({"resume": self.resume, "question": question, "default_experience": default_experience})
         try:
-            output = self.extract_number_from_string(output_str)
+            output = self.extract_number_from_string(output_str['text'])
         except ValueError:
             output = default_experience
         return output
@@ -180,5 +178,6 @@ class GPTAnswerer:
         prompt = ChatPromptTemplate.from_template(func_template)
         chain = prompt | self.llm_cheap | StrOutputParser()
         output_str = chain.invoke({"resume": self.resume, "question": question, "options": options})
-        best_option = self.find_best_match(output_str, options)
+        best_option = self.find_best_match(output_str['text'], options)
         return best_option
+
