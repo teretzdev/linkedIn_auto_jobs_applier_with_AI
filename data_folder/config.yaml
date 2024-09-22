@@ -1,12 +1,12 @@
 remote: true
 
 experienceLevel:
- internship: false
  entry: true
- associate: true
- mid-senior level: true
- director: true
- executive: true
+ associate: false
+ mid: true
+ senior: false
+ director: false
+ executive: false
 
 jobTypes:
  full-time: true
@@ -43,3 +43,5 @@ companyBlacklist:
 titleBlacklist:
   - word1
   - word2
+
+credentialsFilePath: "data_folder/secrets.yaml"  # Path to the secrets file containing credentials

@@ -11,6 +11,8 @@ from langchain.schema import (
     SystemMessage
 )
 
+import google.generativeai as genai  # Added import for genai
+
 
 class LLMLogger:
 
@@ -32,26 +34,18 @@ class LLMLogger:
 
 class GPTAnswerer:
     def __init__(self, openai_api_key: str, google_api_key: str):
-        self.google_api_key = google_api_key
         self.openai_api_key = openai_api_key
-        if self.google_api_key is not None:
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.google_api_key
-            if self.openai_api_key is not None:
-                self.llm_cheap = LLMLogger(
-                    ChatGooglePalm(temperature=0.1, model="models/chat-bison-001", google_api_key=self.google_api_key)
-                )
-            else:
-                # Initialize the Gemini API client
-                aiplatform.init(project='YOUR_PROJECT_ID')
+        self.google_api_key = google_api_key  # Ensure the API key is used as a string, not as a file path
 
-                # Specify the Gemini model endpoint
-                self.endpoint = aiplatform.Endpoint.fetch(endpoint_name='projects/YOUR_PROJECT_ID/locations/YOUR_REGION/endpoints/ENDPOINT_NAME')
-                self.llm_cheap = self._query_gemini
-        else:
-            raise RuntimeError("Either an OpenAI API key or a Google API key must be provided.")
+    # Example adjustment: If previously you were opening the API key as a file, remove that.
+    # For instance, change from:
+    # with open(google_api_key, 'r') as key_file:
+    #     self.google_api_key = key_file.read().strip()
+    # To:
+    # self.google_api_key = google_api_key
 
     def _query_gemini(self, prompts):
-        response = self.endpoint.predict(instances=[{"content": prompts[0].content}])
+        response = self.endpoint.generate_content(instances=[{"content": prompts[0].content}])
         return {'output': {'output': response.predictions[0]["content"]}}
 
     @staticmethod

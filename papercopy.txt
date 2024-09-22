@@ -1,0 +1,208 @@
+Jason James / teretz@gmail.com
+314 467 0696
+Full stack Senior Web Developer w/ working experience in Terraform, Docker, Docker
+Compose, React.js, React Native, TypeScript, Python, Node.js, Laravel, Magento,
+PHP, HTML5, CSS3, JavaScript, jQuery, JSON, XML, Wordpress, CodeIgniter, Cake,
+MySQL, MariaDB, Redis, PostGreSQL, PowerShell, GraphQL, RabbitMQ, Kafka,
+Spark, Ajax, Actionscript, Flash, Unity3D, Lua, and C# are amongst others.
+Over my 13 years of web development, I’ve maintained, developed, or expanded well
+over 220 projects. These projects can be roughly summarized as 45 Magento sites, 30
+Laravel sites, 100+ Wordpress sites, 20+ reactjs projects, 10 Java projects, 10 C#, 20
+Python projects, and various other projects.
+Composer, artisan, npm, yarn, bower, gulp, and elixir are all tools that I try to use in my
+workflow today. For server updates and deploying repos, I include bash scripting /
+webhooks, Ansible ,Terraform, Jenkins, and Git w/ their Pipelines functionality. AWS,
+Bluemix, Azure, and Google Cloud are all cloud platforms that I have experience with.
+SKILLS SUMMARY
+Frontend, Backend, DevOps, CI/CD, Github, Laravel, React.js, React Native, Ansible,
+AWS, Bluemix, Google Cloud, Python, SSH, Swagger, Bash, Dynamics CRM, Jira,
+Gantt charts, scheduling sprints, node.js, composer, Flash MX - CS6, Unity3D,
+Photoshop v3.0 – CS5.5, GIMP,DreamWeaver CS5, Visual C++, Visual C#, XHTML,
+CSS, JavaScript, XML, PHP, MySQL, Ajax, jQuery, Java, Nomad, Consul, PhoneGap,
+3DS, Plasma, Blender, Rhino3D, Solidworks, Truespace, Acid, Cooledit, Ableton Live,
+Adobe Audition, ProTools, Fruityloops, Reason, ReWire, VST plugins, Massive, Traktor,
+Unity3D, Wordpress, CodeIgniter, Fury, Roar, Flixel, Rain {Indie}, Mono, API experience,
+Urban Airship, Mecanim Abilities: 2D/3D Graphic Design/ Editing/ Animation,
+Programming / Scripting(multiple languages), Software Automation, Web
+Browser/Network Forensics, Web Design, Flash, Audio Production / Recording /
+Mastering / Manipulation, Computer Diagnostics/ Repair/ Maintenance, Mobile Apps, 3D
+Rigging Animation, 3d Printers, Embedded Architecture
+TECHNICAL EXPERIENCE
+Freelance Web Dev, Remote Sep 2020 - Present “Wormhole Labs, Bender
+Beatty, North Mill, and others” ● This time block involves freelance work in
+regards to web scraping, nodejs,
+reactjs, api development, Wordpress, Magento, and Laravel as well as
+automation, machine learning pipelines, various app development, and some
+experiments using ai-generated content.
+● More than half of the projects took less than three months to complete or were
+turnkey. During this time, I scored among LinkedIn’s top tier applicants for reactjs. ●
+Some of the technologies I gained work experience in include Kafka, Spark, Zepplin,
+Grafana, JupyterLab, Solidity, Brownie, creating ERC-20 / NFTs, BSC ETH and
+MATIC networks, Moralis platform, and Octoparse.
+Propper Intl, St Louis March 2020 - Sep 2020 Backend Developer
+● Propper Intl offered me a position as a backend developer in their corporation,
+where the focus was on creating a synchronization tool that could send data via
+M3 and Magento2 endpoints and create or update orders, handle shipments, and
+load frontend data on either endpoint
+● The project was written using a nodejs backend, a reactjs typescript GUI frontend
+with AD & auth0 for sign in, and Magento / M3 / REST API for backend
+processes. My work was submitted as complete modules that junior devs could
+easily install if they needed to. Magento 2.2.3 was used for all sites.
+● The focus of the project was to integrate custom REST API functions to facilitate
+communication between M3 and Magento, which was done by modifying the
+inventory in M3 and Magento, populating appropriate forms on Magento's front
+end to display pricing and order status, and delivering tracking numbers and
+delivery status.
+Research, Remote Nov 2019 - March 2020 “Freelance Automation &
+Investments”
+● After some crypto trading, I began work on what would become a perfect
+complement to any trader's strategies: being able to receive Tradingview signals,
+execute the signals, a CLI to automate manual intervention, real-time reporting
+of positions and related data, a Chrome extension to overlap Tradingview
+widgets
+and allow manipulation of orders with a GUI interface, and a way to implement
+the strategies across many accounts.
+● React.js, node.js, redux, thunk, typescript, and sequalize were used in this project
+to create a real time dashboard for analytics, monitoring of positions, and ability
+to influence positions across exchanges from a central terminal.
+Freelance Web Dev, Remote Dec 2017 - July 2019 “ODells Brewery, Charter
+Communication, EvoDesk, and others” ● Executed a few projects, including some
+VR demos using Unity3d and Google Cardboard SDK, some Laravel and Wordpress
+work, including raising SEO of sites to whitehat SEO scores averaging 96/100 per
+page.
+● Inspired by the cryptokittie craze, I decided to overhaul my gaming project so it
+could be marketed using ICO crowdfunding. A successful launch took place in
+June 2018, but the project couldnt get enough funding to keep going, and it was
+dropped until recently in 2022 when GameFi starts to become prominent.
+Spindle 360, Austin, TX December 2016 – June 2017 Senior Web Developer
+● A marketing firm, known as Spindle 360, had immediate need for a Magento and
+Laravel developer. Their current team’s lead had put in his two weeks and they
+needed someone to inherit and maintain about 25 live sites, along with repo
+management
+● I successfully inherited their codebase and stayed their lead developer for six
+months while helping build out their team
+● The projects included about ten ecommerce designed with Laravel and Magento
+as their cores and fifteen sites that were more for product info
+● LAMP and MEAN stacks were used in conjunction with AWS. Databases were
+MySQL, SQL, and AWS Iceberg
+● Used BitBucket, Git, Ansible, PHPStorm, IntelliJ IDEA, Brackets, and Notepad++
+● Apps were created using Java w/ Spring, Spring MVC, and Hibernate ● Dynamics
+CRM was used at the core of their highest revenue makers was not
+properly integrated. Issues persisted over two years before I arrived. This was a
+primary item of interest in which I succeeded in within my first three weeks.
+Research, Saint Louis July 2016 – November 2016 “Privately funded research
+among a few startup gigs”
+● Did a few projects that summer on a freelance basis. Integrated some Unity3d w
+Magento. Also had my first stint with cybersecurity. One client had me start a Java
+app but didnt follow it into maturity as their funding was swept out from
+them. I also was introduced using Raspberry Pis as headless embedded
+architecture.
+Tacony Corporation, St Louis, MO November 2015 – June 2016 Lead Web
+Developer
+● Developed new features for ecommerce, frontend, backend, and content
+management systems.
+● Inherited about forty repos and websites that I became directly responsible for.
+With over 250 million dollars of revenue coming through their websites, I
+performed in a high pressure environment daily and loved it.
+● Practiced frontend and backend for Magento, Laravel, Wordpress, classic .ASP,
+Java apps and ColdFusion. MySQL and SQL were commonly used. ● Upgraded
+functionality of servers to allow visualization of data bottlenecks or resource
+misconfigs. Fixed some server to server issues for warehouse. ● Used BitBucket,
+Git, Ansible, PHPStorm, Brackets, IntelliJ IDEA, and Notepad++ ● Worked directly
+under the Project Manager as the corp’s ‘go to guy. ● Most everything had a ticket
+in Atlassian Jira. Bi weekly stand up meetings and sprint schedules were
+commonplace.
+● By the time I finished my six month contract, I was informed that I personally
+completed 18 months of backlogged code that was designated for an entire
+team.
+Freelance Web Dev, Remote November 2009 – Nov 2015 “Honda, Toyota, Prairie
+Farms, and Cabala Sports were among my clients” ● Develop Mobile
+applications, graphics, websites, flash sites, video games, and web-based application
+designs.
+● Been coding HTML since 1994 and one of the first people to use Flash. 2006
+was when a decision to do it professionally was made.
+● Knows how to upgrade offline databases to online and can script transmission
+methods securely and quickly. Handcoded queries or used ororORMs depending
+on project.
+● Proficient in most Adobe products relevant.
+● Experience extends into Visual C#, C++, VB#, HTML, XHTML, CSS, Visual C#,
+C++, JavaScript, Java, SQL, MySQL, ASP, PHP, Ajax, and Unity3D. ● Use multiple
+frameworks including script.aculo.us, Prototype, jQuery, Hibernate, Spring,
+Wordpress, OpenCart, BigCommerce, Magento, Codeiginiter, and Laravel 4 or 5.
+● Web production experience from beginning to completion.
+● Ability to quickly troubleshoot and fix web browser compatibility issues.
+● Most of what I create nowadays is based on responsive design using Bootstrap
+or Zerbs Foundation.
+Blayzer/Phat Buddha Productions, St Louis, MO October 2013 – July 2014 Senior
+Web Developer
+● Started as a freelance Wordpress developer and quickly rose to senior level
+status.
+● Aside from the project manager, I was their primary web developer. ● Over
+the course of my time there, I worked on around twenty five different
+projects.
+● While there, I expanded my CMS skillset to include Magento, OpenCart, and
+Exponent.
+● When a project grew to the point where graphical theme and wireframe were
+finalized, then the project was passed to me. Singlehandedly, I would slice the
+PSD’s and make custom components in whatever CMS was chosen, and create
+the site singlehandedly.
+Teretz Studios/O’Dell’s Irish Pub, Eureka, MO November 2011 – March 2013
+Freelance Web Developer/Game
+● Branched out into Unity 3D game development.
+● In order to do it quickly, I had to experiment with porting from C# to Javascript,
+and in constructor functions for the Unity3D to do API calls.
+● Tested frameworks for rated development speed.
+● Built nine small games which were all Facebook, Droid, and iPad compatible. ●
+Created a MMO sandbox environment in which integrated an experimental
+framework for expanding large amounts of content quickly. It was a modified
+version of the Roar framework, but replaced the input buttons with events
+triggered from inside a full action 3D MMO gaming engine that can be ported to all
+platforms.
+B&B Enterprise Holdings, Clayton, MO October 2010 – November 2011 Web
+Designer/Tech/Workflow
+● Developed graphics, websites, and templates for companies, clients, and to
+resell or promote business.
+● Created video commercials, email blast campaigns, and blogs for each
+employee.
+● Was leased out as an extra service to clients trying to build their own business.
+● Built custom CRM utility suite that was oriented towards their industry. This was
+built in Codeigniter and had a small public facing app built in Java that was used
+to report status of their client’s cases and status of loan modifications.
+● Responsible for maintenance of networks, workstations, and management’s
+personal technology requests.
+● Explained how to use computers efficiently to the employees for day to day
+tasks.
+● Concluded the necessary requirement to gain work equivalent of a bachelor
+degree in Web Architecture.
+Odesk.com, Internet September 2009 – Present Flash/Web Developer
+● Ranked in Top 7% of Flash developers worldwide for this site.
+● Developed Flash sites and games.
+● Edited preexisting websites to reflect changes requested by clients.
+● Created several Wordpress sites along w Codeigniter.
+VooDoo Gaming, Internet September 2009 – Present Game Developer
+● Game developer that worked under the owner of the company.
+● Programmed in GML. Migrated company to use Unity3d.
+● Coordinated with Maya and 3DS artists.
+Level 5 Web Design, St Louis, MO July 2008 – August 2009 Lead Website
+Designer
+● Built websites and designed all graphics.
+● Interacted with clients on details of web project. Acted as project manager and
+lead developer.
+● Created site that was heavy on JavaScript. Used JavaScript to create animations
+and functionality.
+● Examples were slideshows, animated menus, and form validations. ● Used a
+combination of PHP, MySQL, and scripts to audit the employee’s time and internet
+usage. The desired effect was to have it automatically give all details queried into
+Excel so my employer was able to review it easily.
+● Interviewed and hired staff.
+Express Worldwide/Pharmacy Express, St Louis, MO March 2008 – July 2009
+Dispatch Supervisor/Web Admin
+● Designed all functionality for an almost nonexistent website.
+● Did not redesign the site but rather engaged and understood a combination of
+500 PHP scripts with multiple languages and frameworks involved. ● Designed
+the administrator panel, tracking system, forms, and web hosting. ● Updated the
+website content.
+● Implemented MySQL database.
+● Dealt with clients directly.
+● Reformatted and troubleshoot server issues.
+● Implemented a mail merge system.+

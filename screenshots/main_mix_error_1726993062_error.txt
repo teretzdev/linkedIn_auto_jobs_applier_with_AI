@@ -1,0 +1,1 @@
+An error occurred in main_mix: 'LinkedInBotFacade' object has no attribute 'driver'

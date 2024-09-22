@@ -15,3 +15,4 @@ chrome_profile
 data_folder_example*
 node_modules
 your_env_name
+venv

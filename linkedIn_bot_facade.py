@@ -1,8 +1,9 @@
 class LinkedInBotFacade:
 
-    def __init__(self, login_component, apply_component):
+    def __init__(self, login_component, apply_component, driver):
         self.login_component = login_component
         self.apply_component = apply_component
+        self.driver = driver  # Add this line
         self.state = {
             "credentials_set": False,
             "api_key_set": False,
@@ -54,7 +55,7 @@ class LinkedInBotFacade:
             raise ValueError("Gemini Answerer must be set before applying.")
         if not self.state["parameters_set"]:
             raise ValueError("Parameters must be set before applying.")
-        self.apply_component.start_applying()
+        self.apply_component.start_applying(self.driver)  # Pass self.driver here if needed
 
     def generate_answer(self, question):
         if not self.gemini_answerer:

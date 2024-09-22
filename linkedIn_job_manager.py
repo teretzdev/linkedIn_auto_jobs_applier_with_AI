@@ -32,6 +32,7 @@ class LinkedInJobManager:
         self.driver = driver
         self.wait = wait
         self.gemini_answerer = None
+        self.gpt_answerer = None  # Initialize gpt_answerer as None
 
     def set_parameters(self, parameters):
         self.company_blacklist = parameters.get('companyBlacklist', []) or []
@@ -70,10 +71,10 @@ class LinkedInJobManager:
                         self.set_old_answers[(answer_type.lower(), question_text.lower())] = answer
 
 
-    def start_applying(self):
-        self.easy_applier_component = LinkedInEasyApplier(
-            self.driver, self.resume_dir, self.set_old_answers, self.gpt_answerer
-        )
+    def start_applying(self, driver=None):
+        # Use self.browser or driver (if provided) for Selenium operations
+        browser_to_use = driver or self.driver
+        self.easy_applier = LinkedInEasyApplier(browser_to_use)  # Removed extra arguments
         searches = list(product(self.positions, self.locations))
         random.shuffle(searches)
         page_sleep = 0
@@ -148,7 +149,7 @@ class LinkedInJobManager:
 
                 try:
                     if job.apply_method not in {"Continue", "Applied", "Apply"}:
-                        self.easy_applier_component.job_apply(job)
+                        self.easy_applier.job_apply(job)
                 except Exception as e:
                     utils.printred(traceback.format_exc())
                     self.write_to_file(job.company, job.location, job.title, job.link, "failed")
@@ -208,22 +209,27 @@ class LinkedInJobManager:
             job_title = job_tile.find_element(By.CLASS_NAME, 'job-card-list__title').text
             link = job_tile.find_element(By.CLASS_NAME, 'job-card-list__title').get_attribute('href').split('?')[0]
             company = job_tile.find_element(By.CLASS_NAME, 'job-card-container__primary-description').text
-        except:
+        except NoSuchElementException:
+            utils.printred("Failed to extract job title, company, or link.")
             pass
         try:
-            hiring_line = job_tile.find_element(By.XPATH, '//span[contains(.,\' is hiring for this\')]')
+            # Updated XPath to be more robust
+            hiring_line = job_tile.find_element(By.XPATH, './/span[contains(text(),"is hiring for this")]')
             hiring_line_text = hiring_line.text
             name_terminating_index = hiring_line_text.find(' is hiring for this')
-        except:
-            pass
+        except NoSuchElementException:
+            hiring_line_text = ""
+            utils.printyellow("Hiring line not found for this job.")
         try:
             job_location = job_tile.find_element(By.CLASS_NAME, 'job-card-container__metadata-item').text
-        except:
+        except NoSuchElementException:
+            utils.printred("Failed to extract job location.")
             pass
         try:
             apply_method = job_tile.find_element(By.CLASS_NAME, 'job-card-container__apply-method').text
-        except:
+        except NoSuchElementException:
             apply_method = "Applied"
+            utils.printyellow("Apply method not found, defaulting to 'Applied'.")
 
         return job_title, company, job_location, link, apply_method
     

@@ -6,6 +6,7 @@ import time
 import traceback
 from datetime import date
 from typing import List, Optional, Any, Tuple
+from pathlib import Path  # Added import for Path
 import uuid
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
@@ -26,12 +27,13 @@ from reportlab.lib.pagesizes import letter
 from xhtml2pdf import pisa
 
 import utils    
+from selenium.webdriver.remote.webelement import WebElement  # Added import for WebElement
 
 class LinkedInEasyApplier:
-    def __init__(self, driver, wait_time: int = 10):
+    def __init__(self, driver, wait, gpt_answerer):
         self.driver = driver
-        self.wait_time = wait_time
-        self.wait = WebDriverWait(self.driver, self.wait_time)
+        self.wait = wait
+        self.gpt_answerer = gpt_answerer
 
     def _process_question(self, section) -> None:
         try:
