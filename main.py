@@ -277,6 +277,7 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
             plain_text_resume_file = file.read()
         resume_object = Resume(plain_text_resume_file)
         logging.debug("Resume object created")
+        resume_object.export_resume(format='pdf', file_path=str(output_folder / 'exported_resume.pdf'))
         
         # Pass browser as the third argument to LinkedInBotFacade
         bot = LinkedInBotFacade(login_component, apply_component, browser)

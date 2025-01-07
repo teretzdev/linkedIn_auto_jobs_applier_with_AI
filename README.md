@@ -115,6 +115,14 @@ This file contains sensitive information. Never share or commit this file to ver
 
 This file defines your job search parameters and bot behavior. Each section contains options that you can customize:
 
+- `exportFormat: [pdf/html]`
+  - Specify the format for exporting the resume. Choose between `pdf` or `html`.
+  - Example: `exportFormat: pdf`
+
+- `exportLocation: [path/to/export/directory]`
+  - Specify the directory path where the exported resume will be saved.
+  - Example: `exportLocation: /path/to/export/directory`
+
 - `remote: [true/false]`
   - Set to `true` to include remote jobs, `false` to exclude them
 
@@ -166,6 +174,19 @@ This file defines your job search parameters and bot behavior. Each section cont
     titleBlacklist:
       - Sales
       - Marketing
+    ```
+
+### Export Configuration
+
+To configure the export feature, you need to specify the format and location for the exported resume in the `config.yaml` file:
+
+- `exportFormat: [pdf/html]`
+  - Choose the format for exporting the resume. Options are `pdf` or `html`.
+  - Example: `exportFormat: pdf`
+
+- `exportLocation: [path/to/export/directory]`
+  - Define the directory path where the exported resume will be saved.
+  - Example: `exportLocation: /path/to/export/directory`
     ```
 
 ### 3. plain_text_resume.yaml
