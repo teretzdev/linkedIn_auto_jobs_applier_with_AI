@@ -36,6 +36,12 @@ locations:
   
 distance: 100
 
+exportFormat: pdf  # Specify the format for exporting the resume. Choose between 'pdf' or 'html'.
+# Example: exportFormat: pdf
+
+exportLocation: /path/to/export/directory  # Specify the directory path where the exported resume will be saved.
+# Example: exportLocation: /path/to/export/directory
+
 companyBlacklist:
   - Company1
   - Company2

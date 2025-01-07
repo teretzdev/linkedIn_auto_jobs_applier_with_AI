@@ -277,12 +277,18 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
             plain_text_resume_file = file.read()
         resume_object = Resume(plain_text_resume_file)
         logging.debug("Resume object created")
-        resume_object.export_resume(format='pdf', file_path=str(output_folder / 'exported_resume.pdf'))
+        
+        # Export the resume using the specified format and location
+        export_format = parameters.get('exportFormat', 'pdf')
+        export_location = parameters.get('exportLocation', str(output_folder / 'exported_resume'))
+        resume_object.export_resume(format=export_format, file_path=export_location)
+        logging.debug(f"Resume exported as {export_format} to {export_location}")
         
         # Pass browser as the third argument to LinkedInBotFacade
         bot = LinkedInBotFacade(login_component, apply_component, browser)
         logging.debug("LinkedInBotFacade initialized")
         
+        bot.set_secrets(email, password)
         bot.set_secrets(email, password)
         bot.set_resume(resume_object)
         bot.set_gemini_answerer(gpt_answerer_component)

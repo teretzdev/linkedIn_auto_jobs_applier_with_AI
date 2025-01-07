@@ -133,6 +133,17 @@ This file defines your job search parameters and bot behavior. Each section cont
 - `exportLocation: [path/to/export/directory]`
   - Specify the directory path where the exported resume will be saved.
   - Example: `exportLocation: /path/to/export/directory`
+### 2. config.yaml
+
+This file defines your job search parameters and bot behavior. Each section contains options that you can customize:
+
+- `exportFormat: [pdf/html]`
+  - Specify the format for exporting the resume. Choose between `pdf` or `html`.
+  - Example: `exportFormat: pdf`
+
+- `exportLocation: [path/to/export/directory]`
+  - Specify the directory path where the exported resume will be saved.
+  - Example: `exportLocation: /path/to/export/directory`
 
 - `remote: [true/false]`
   - Set to `true` to include remote jobs, `false` to exclude them
@@ -145,7 +156,6 @@ This file defines your job search parameters and bot behavior. Each section cont
 
 - `date:`
   - Choose one time range for job postings by setting it to `true`, others to `false`
-
 - `positions:`
   - List job titles you're interested in, one per line
   - Example:
