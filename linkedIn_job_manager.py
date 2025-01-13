@@ -34,6 +34,17 @@ class LinkedInJobManager:
         self.gemini_answerer = None
         self.gpt_answerer = None  # Initialize gpt_answerer as None
 
+    def store_gathered_jobs(self, job_data, file_path="gathered_jobs.csv"):
+        """
+        Store gathered job data into a CSV file.
+        """
+        with open(file_path, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=["title", "company", "location", "link"])
+            writer.writeheader()
+            for job in job_data:
+                writer.writerow(job)
+        print(f"Gathered jobs stored in {file_path}")
+
     def set_parameters(self, parameters):
         self.company_blacklist = parameters.get('companyBlacklist', []) or []
         self.title_blacklist = parameters.get('titleBlacklist', []) or []

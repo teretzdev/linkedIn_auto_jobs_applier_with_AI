@@ -1,3 +1,5 @@
+from linkedin_job_scraper import LinkedInJobScraper
+
 class LinkedInBotFacade:
 
     def __init__(self, login_component, apply_component, driver):
@@ -56,6 +58,19 @@ class LinkedInBotFacade:
         if not self.state["parameters_set"]:
             raise ValueError("Parameters must be set before applying.")
         self.apply_component.start_applying(self.driver)  # Pass self.driver here if needed
+
+    def gather_jobs(self, search_string, file_path="jobs.csv"):
+        if not self.state["logged_in"]:
+            raise ValueError("You must be logged in to gather jobs.")
+        
+        scraper = LinkedInJobScraper(self.email, self.password)
+        try:
+            scraper.authenticate()
+            job_data = scraper.search_jobs(search_string)
+            scraper.store_jobs(job_data, file_path)
+        finally:
+            scraper.close()
+        print(f"Jobs gathered and stored in {file_path}")
 
     def generate_answer(self, question):
         if not self.gemini_answerer:

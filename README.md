@@ -258,7 +258,16 @@ Using this folder as a guide can be particularly helpful for:
    - `config.yaml`
    - `plain_text_resume.yaml`
 
-3. **Run the Bot:**
+3. **Gather Jobs:**
+
+   To gather jobs from LinkedIn using a specific search string, use the `--search-string` option. This feature allows you to collect job listings that match your criteria and store them in a CSV file for later review or application.
+
+   Example command:
+   ```bash
+   python main.py --search-string "Data Scientist"
+   ```
+
+4. **Run the Bot:**
 
    LinkedIn_AIHawk offers flexibility in how it handles your pdf resume:
 
