@@ -260,11 +260,11 @@ Using this folder as a guide can be particularly helpful for:
 
 3. **Gather Jobs:**
 
-   To gather jobs from LinkedIn using a specific search string, use the `--search-string` option. This feature allows you to collect job listings that match your criteria and store them in a CSV file for later review or application.
+   To gather jobs from LinkedIn using a specific search string, use the `gather_jobs` command. This feature allows you to collect job listings that match your criteria and store them in a CSV file for later review or application.
 
    Example command:
    ```bash
-   python main.py --search-string "Data Scientist"
+   python main.py gather_jobs --search-string "Data Scientist"
    ```
 
 4. **Run the Bot:**
@@ -274,12 +274,21 @@ Using this folder as a guide can be particularly helpful for:
 - **Dynamic Resume Generation:**
   If you don't use the `--resume` option, the bot will automatically generate a unique resume for each application. This feature uses the information from your `plain_text_resume.yaml` file and tailors it to each specific job application, potentially increasing your chances of success by customizing your resume for each position.
    ```bash
-   python main.py
+   python main.py gather_jobs
    ```
 - **Using a Specific Resume:**
   If you want to use a specific PDF resume for all applications, run the bot with the `--resume` option:
   ```bash
-  python main.py --resume /path/to/your/resume.pdf
+  python main.py gather_jobs --resume /path/to/your/resume.pdf
+  ```
+
+5. **Apply to Jobs:**
+
+   After gathering jobs, you can apply to them using the `--apply` flag with the `gather_jobs` command. This will start the application process for the jobs that have been gathered.
+
+   Example command:
+   ```bash
+   python main.py gather_jobs --apply
   ```
 
 ## Documentation

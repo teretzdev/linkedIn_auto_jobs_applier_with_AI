@@ -48,18 +48,8 @@ class LinkedInBotFacade:
         self.login_component.start()
         self.state["logged_in"] = True
 
-    def start_apply(self):
-        if not self.state["logged_in"]:
-            raise ValueError("You must be logged in before applying.")
-        if not self.state["resume_set"]:
-            raise ValueError("Plain text resume must be set before applying.")
-        if not self.state["gemini_answerer_set"]:
-            raise ValueError("Gemini Answerer must be set before applying.")
-        if not self.state["parameters_set"]:
-            raise ValueError("Parameters must be set before applying.")
-        self.apply_component.start_applying(self.driver)  # Pass self.driver here if needed
-
     def gather_jobs(self, search_string, file_path="jobs.csv"):
+        """Gather jobs based on the search string and store them in a CSV file."""
         if not self.state["logged_in"]:
             raise ValueError("You must be logged in to gather jobs.")
         
@@ -71,6 +61,18 @@ class LinkedInBotFacade:
         finally:
             scraper.close()
         print(f"Jobs gathered and stored in {file_path}")
+
+    def start_apply(self):
+        """Start the application process for gathered jobs."""
+        if not self.state["logged_in"]:
+            raise ValueError("You must be logged in before applying.")
+        if not self.state["resume_set"]:
+            raise ValueError("Plain text resume must be set before applying.")
+        if not self.state["gemini_answerer_set"]:
+            raise ValueError("Gemini Answerer must be set before applying.")
+        if not self.state["parameters_set"]:
+            raise ValueError("Parameters must be set before applying.")
+        self.apply_component.start_applying(self.driver)
 
     def generate_answer(self, question):
         if not self.gemini_answerer:
