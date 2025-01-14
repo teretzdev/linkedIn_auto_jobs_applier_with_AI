@@ -149,6 +149,9 @@ class LinkedInJobManager:
 
                 try:
                     if job.apply_method not in {"Continue", "Applied", "Apply"}:
+                        # Preview the resume before applying
+                        if self.resume_dir:
+                            self.easy_applier._preview_resume(self.resume_dir)
                         self.easy_applier.job_apply(job)
                 except Exception as e:
                     utils.printred(traceback.format_exc())
