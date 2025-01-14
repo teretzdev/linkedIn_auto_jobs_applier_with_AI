@@ -35,6 +35,15 @@ class LinkedInEasyApplier:
         self.wait = wait
         self.gpt_answerer = gpt_answerer
 
+    def _preview_resume(self, resume_path: Path) -> None:
+        try:
+            with open(resume_path, 'r') as file:
+                resume_content = file.read()
+            print("Resume Preview:")
+            print(resume_content)
+        except Exception as e:
+            print(f"Error previewing resume: {str(e)}")
+
     def _process_question(self, section) -> None:
         try:
             questions = section.find_elements(By.CLASS_NAME, 'jobs-easy-apply-form-section__question')
@@ -149,14 +158,29 @@ class LinkedInEasyApplier:
             parent = element.find_element(By.XPATH, "..")
             self.driver.execute_script("arguments[0].classList.remove('hidden')", element)
             if 'resume' in parent.text.lower():
-                if self.resume_dir != None:
+                available_resumes = list(Path('resumes').glob('*.pdf'))
+                selected_resume = self._select_premade_resume(available_resumes)
+                if selected_resume:
+                    self._preview_resume(selected_resume)
+                    element.send_keys(str(selected_resume.resolve()))
+                elif self.resume_dir is not None:
                     resume_path = self.resume_dir.resolve()
-                if self.resume_dir != None and resume_path.exists() and resume_path.is_file():
-                    element.send_keys(str(resume_path))
-                else:
-                    self._create_and_upload_resume(element)
+                    if resume_path.exists() and resume_path.is_file():
+                        self._preview_resume(resume_path)
+                        element.send_keys(str(resume_path))
+                    else:
+                        self._create_and_upload_resume(element)
             elif 'cover' in parent.text.lower():
                 self._create_and_upload_cover_letter(element)
+
+    def _select_premade_resume(self, available_resumes: List[Path]) -> Optional[Path]:
+        print("Available Resumes:")
+        for idx, resume in enumerate(available_resumes):
+            print(f"{idx + 1}: {resume.name}")
+        choice = input("Select a resume by number (or press Enter to skip): ")
+        if choice.isdigit() and 1 <= int(choice) <= len(available_resumes):
+            return available_resumes[int(choice) - 1]
+        return None
 
     def _create_and_upload_resume(self, element):
         max_retries = 3
@@ -187,7 +211,7 @@ class LinkedInEasyApplier:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \nTraceback:\n{tb_str}")
+                    raise Exception(f"Max retries reached. Upload failed: \\nTraceback:\\n{tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
         element.send_keys(str(self.resume_dir))
