@@ -1,4 +1,6 @@
 import time
+import random
+from tenacity import retry, wait_exponential, stop_after_attempt
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, TimeoutException, StaleElementReferenceException
@@ -15,6 +17,26 @@ from gpt import GPTAnswerer
 import json
 import random
 import pika
+
+def rate_limited(max_per_second):
+    min_interval = 1.0 / max_per_second
+    def decorate(func):
+        last_time_called = 0
+        def rate_limited_function(*args, **kwargs):
+            nonlocal last_time_called
+            elapsed = time.time() - last_time_called
+            left_to_wait = min_interval - elapsed
+            if left_to_wait > 0:
+                time.sleep(left_to_wait)
+            ret = func(*args, **kwargs)
+            last_time_called = time.time()
+            return ret
+        return rate_limited_function
+    return decorate
+
+@retry(wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(5))
+def retry_with_exponential_backoff(func):
+    return func()
 
 # Configure logging
 logging.basicConfig(
@@ -82,6 +104,7 @@ def click_search_button(browser, wait):
         save_screenshot_with_error(browser, f"Search button error: {str(e)}", "search_button_error")
         raise
 
+@rate_limited(0.2)  # Limit to 1 request every 5 seconds
 def get_job_listings(browser, wait):
     logging.debug("Retrieving job listings")
     max_retries = 3
@@ -114,6 +137,7 @@ def navigate_pagination(browser, wait):
         logging.info("Next page button not found or not clickable")
     return None
 
+@rate_limited(0.5)  # Limit to 1 request every 2 seconds
 def apply_to_job(browser, job_id, easy_applier, applied_jobs):
     if job_id in applied_jobs:
         logging.info(f"Job ID {job_id} already applied, skipping")
