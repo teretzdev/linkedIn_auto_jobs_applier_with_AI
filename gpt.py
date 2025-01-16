@@ -45,8 +45,21 @@ class GPTAnswerer:
     # self.google_api_key = google_api_key
 
     def _query_gemini(self, prompts):
-        response = self.endpoint.generate_content(instances=[{"content": prompts[0].content}])
-        return {'output': {'output': response.predictions[0]["content"]}}
+        max_retries = 3
+        delay = 1  # Initial delay in seconds
+        for attempt in range(max_retries):
+            try:
+                response = self.endpoint.generate_content(instances=[{"content": prompts[0].content}])
+                return {'output': {'output': response.predictions[0]["content"]}}
+            except Exception as e:
+                print(f"Error querying Gemini API: {str(e)}")
+                if attempt < max_retries - 1:
+                    print(f"Retrying in {delay} seconds...")
+                    time.sleep(delay)
+                    delay *= 2  # Exponential backoff
+                else:
+                    print("Max retries reached. Failing gracefully.")
+                    return None
 
     @staticmethod
     def find_best_match(text: str, options: list[str]) -> str:

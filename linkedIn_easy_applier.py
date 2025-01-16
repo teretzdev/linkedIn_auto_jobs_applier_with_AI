@@ -76,9 +76,14 @@ class LinkedInEasyApplier:
             print(f"Error answering question: {str(e)}")
 
     def _scroll_page(self) -> None:
-        scrollable_element = self.driver.find_element(By.TAG_NAME, 'html')
-        utils.scroll_slow(self.driver, scrollable_element, step=300, reverse=False)
-        utils.scroll_slow(self.driver, scrollable_element, step=300, reverse=True)
+        try:
+            scrollable_element = self.driver.find_element(By.TAG_NAME, 'html')
+            utils.scroll_slow(self.driver, scrollable_element, step=300, reverse=False)
+            utils.scroll_slow(self.driver, scrollable_element, step=300, reverse=True)
+        except NoSuchElementException:
+            print("Scrollable element not found.")
+        except Exception as e:
+            print(f"Error scrolling page: {str(e)}")
 
     def _fill_application_form(self):
         while True:
@@ -87,18 +92,23 @@ class LinkedInEasyApplier:
                 break
 
     def _next_or_submit(self):
-        next_button = self.driver.find_element(By.CLASS_NAME, "artdeco-button--primary")
-        button_text = next_button.text.lower()
-        if 'submit application' in button_text:
-            self._unfollow_company()
+        try:
+            next_button = self.driver.find_element(By.CLASS_NAME, "artdeco-button--primary")
+            button_text = next_button.text.lower()
+            if 'submit application' in button_text:
+                self._unfollow_company()
+                time.sleep(random.uniform(1.5, 2.5))
+                next_button.click()
+                time.sleep(random.uniform(1.5, 2.5))
+                return True
             time.sleep(random.uniform(1.5, 2.5))
             next_button.click()
-            time.sleep(random.uniform(1.5, 2.5))
-            return True
-        time.sleep(random.uniform(1.5, 2.5))
-        next_button.click()
-        time.sleep(random.uniform(3.0, 5.0))
-        self._check_for_errors()
+            time.sleep(random.uniform(3.0, 5.0))
+            self._check_for_errors()
+        except NoSuchElementException:
+            print("Next or submit button not found.")
+        except Exception as e:
+            print(f"Error clicking next or submit button: {str(e)}")
 
 
     def _unfollow_company(self) -> None:
@@ -113,9 +123,14 @@ class LinkedInEasyApplier:
 
     def _click_apply_button(self) -> None:
         try:
-            apply_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="continue_unqualified"]')))
-            apply_button.click()
-            print("Apply button clicked.")
+            try:
+                apply_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-control-name="continue_unqualified"]')))
+                apply_button.click()
+                print("Apply button clicked.")
+            except TimeoutException:
+                print("Apply button not found or not clickable.")
+            except Exception as e:
+                print(f"Error clicking apply button: {str(e)}")
         except TimeoutException:
             print("Apply button not found or not clickable.")
         except Exception as e:
@@ -123,10 +138,15 @@ class LinkedInEasyApplier:
 
     def fill_up(self) -> None:
         try:
-            easy_apply_content = self.driver.find_element(By.CLASS_NAME, 'jobs-easy-apply-content')
-            pb4_elements = easy_apply_content.find_elements(By.CLASS_NAME, 'pb4')
-            for element in pb4_elements:
-                self._process_form_element(element)
+            try:
+                easy_apply_content = self.driver.find_element(By.CLASS_NAME, 'jobs-easy-apply-content')
+                pb4_elements = easy_apply_content.find_elements(By.CLASS_NAME, 'pb4')
+                for element in pb4_elements:
+                    self._process_form_element(element)
+            except NoSuchElementException:
+                print("Easy apply content or form elements not found.")
+            except Exception as e:
+                print(f"Error filling up application form: {str(e)}")
         except Exception as e:
             pass
         
@@ -153,22 +173,26 @@ class LinkedInEasyApplier:
             print(f"Error clicking submit button: {str(e)}")
 
     def _handle_upload_fields(self, element: WebElement) -> None:
-        file_upload_elements = self.driver.find_elements(By.XPATH, "//input[@type='file']")
-        for element in file_upload_elements:
-            parent = element.find_element(By.XPATH, "..")
-            self.driver.execute_script("arguments[0].classList.remove('hidden')", element)
-            if 'resume' in parent.text.lower():
-                # Use the resume path provided at runtime
-                if self.resume_dir is not None:
-                    resume_path = self.resume_dir.resolve()
-                    if resume_path.exists() and resume_path.is_file():
-                        self._preview_resume(resume_path)
-                        element.send_keys(str(resume_path))
-                    else:
-                        print(f"Warning: Resume path is invalid or does not point to a file: {resume_path}")
-                        print("Skipping resume upload step.")
-            elif 'cover' in parent.text.lower():
-                self._create_and_upload_cover_letter(element)
+        try:
+            file_upload_elements = self.driver.find_elements(By.XPATH, "//input[@type='file']")
+            for element in file_upload_elements:
+                parent = element.find_element(By.XPATH, "..")
+                self.driver.execute_script("arguments[0].classList.remove('hidden')", element)
+                if 'resume' in parent.text.lower():
+                    # Use the resume path provided at runtime
+                    if self.resume_dir is not None:
+                        resume_path = self.resume_dir.resolve()
+                        if resume_path.exists() and resume_path.is_file():
+                            self._preview_resume(resume_path)
+                            element.send_keys(str(resume_path))
+                        else:
+                            self._create_and_upload_resume(element)
+                elif 'cover' in parent.text.lower():
+                    self._create_and_upload_cover_letter(element)
+        except NoSuchElementException:
+            print("File upload elements not found.")
+        except Exception as e:
+            print(f"Error handling upload fields: {str(e)}")
 
     def _select_premade_resume(self, available_resumes: List[Path]) -> Optional[Path]:
         print("Available Resumes:")
@@ -208,7 +232,7 @@ class LinkedInEasyApplier:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \\\\nTraceback:\\\\n{tb_str}")
+                    raise Exception(f"Max retries reached. Upload failed: \\\\\nTraceback:\\\\\n{tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
         element.send_keys(str(self.resume_dir))
