@@ -1,33 +1,38 @@
 remote: true
 
 experienceLevel:
-  internship: true
-  entry: false
-  associate: true
-  mid-senior level: false
-  director: true
+  entry: true
+  associate: false
+  mid: true
+  senior: false
+  director: false
   executive: false
 
 jobTypes:
   full-time: true
-  contract: false
-  part-time: false
+  contract: true
+  part-time: true
   temporary: true
   internship: false
-  other: false
-  volunteer: true
+  other: true
+  volunteer: false
 
 date:
-  all time: false
+  all time: true
   month: true
-  week: false
+  week: true
   24 hours: true
 
 positions:
   - Software developer
+  - Web developer
+  - Javascript developer
+  - React developer
+  - Magento developer
+  - Wordpress developer
 
 locations:
-  - Germany
+  - United States
 
 distance: 100
 
@@ -35,4 +40,10 @@ companyBlacklist:
   - Noir
   - Crossover
 
+default_resume_path: 'data_folder/resume.pdf'
+
 titleBlacklist:
+  - word1
+  - word2
+
+credentialsFilePath: "data_folder/secrets.yaml"  # Path to the secrets file containing credentials

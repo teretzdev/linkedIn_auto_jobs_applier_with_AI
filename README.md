@@ -89,9 +89,28 @@ LinkedIn_AIHawk steps in as a game-changing solution to these challenges. It's n
    cd LinkedIn_AIHawk_automatic_job_application
    ```
 
-4. **Install the required packages:**
+4. **Create a `.env` file:**
+
+   Copy the `.env.example` file to `.env` and fill in the required environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+
+   - `SKIP_APPLY`: Set to `True` to skip the application process, `False` otherwise.
+   - `DISABLE_DESCRIPTION_FILTER`: Set to `True` to disable the description filter, `False` otherwise.
+   - `OPENAI_API_KEY`: Your OpenAI API key for accessing GPT services.
+   - `GOOGLE_API_KEY`: Your Google API key for accessing Google services.
+
+5. **Install the required packages:**
    ```bash
    pip install -r requirements.txt
+   ```
+
+6. **Run the application:**
+
+   To start the application, use the following command:
+   ```bash
+   python main.py
    ```
 
 ## Configuration
