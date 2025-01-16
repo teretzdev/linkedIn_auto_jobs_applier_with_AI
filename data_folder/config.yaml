@@ -44,4 +44,6 @@ titleBlacklist:
   - word1
   - word2
 
+premadeResumePath: "data_folder/premade_resume.pdf"  # Default path to the premade resume
+premadeResumePath: "data_folder/premade_resume.pdf"  # Default path to the premade resume
 credentialsFilePath: "data_folder/secrets.yaml"  # Path to the secrets file containing credentials

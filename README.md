@@ -115,6 +115,9 @@ This file contains sensitive information. Never share or commit this file to ver
 
 This file defines your job search parameters and bot behavior. Each section contains options that you can customize:
 
+- `premadeResumePath: [path/to/premade_resume.pdf]`
+  - Set the path to your premade resume PDF file. This path will be used by default for all job applications unless overridden by a command-line argument.
+
 - `remote: [true/false]`
   - Set to `true` to include remote jobs, `false` to exclude them
 
@@ -259,11 +262,10 @@ Using this folder as a guide can be particularly helpful for:
    - `plain_text_resume.yaml`
 
 3. **Run the Bot:**
+LinkedIn_AIHawk offers flexibility in how it handles your PDF resume:
 
-   LinkedIn_AIHawk offers flexibility in how it handles your pdf resume:
-
-- **Dynamic Resume Generation:**
-  If you don't use the `--resume` option, the bot will automatically generate a unique resume for each application. This feature uses the information from your `plain_text_resume.yaml` file and tailors it to each specific job application, potentially increasing your chances of success by customizing your resume for each position.
+- **Using a Premade Resume by Default:**
+  If you have set the `premadeResumePath` in your `config.yaml`, the bot will use this premade resume for all applications by default. You can override this by providing a different resume path using the `--resume` option.
    ```bash
    python main.py
    ```

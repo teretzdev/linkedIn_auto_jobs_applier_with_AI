@@ -20,6 +20,12 @@ class LinkedInBotFacade:
         self.resume = resume
         self.state["resume_set"] = True
 
+    def set_premade_resume(self, premade_resume_path):
+        if not premade_resume_path:
+            raise ValueError("Premade resume path cannot be empty.")
+        self.premade_resume_path = premade_resume_path
+        self.state["premade_resume_set"] = True
+
     def set_secrets(self, email, password):
         if not email or not password:
             raise ValueError("Email and password cannot be empty.")
@@ -49,8 +55,11 @@ class LinkedInBotFacade:
     def start_apply(self):
         if not self.state["logged_in"]:
             raise ValueError("You must be logged in before applying.")
-        if not self.state["resume_set"]:
-            raise ValueError("Plain text resume must be set before applying.")
+        if not self.state.get("resume_set") and not self.state.get("premade_resume_set"):
+            raise ValueError("A resume must be set before applying.")
+        if self.state.get("premade_resume_set") and not self.state.get("resume_set"):
+            self.resume = self.premade_resume_path
+            self.state["resume_set"] = True
         if not self.state["gemini_answerer_set"]:
             raise ValueError("Gemini Answerer must be set before applying.")
         if not self.state["parameters_set"]:

@@ -46,24 +46,24 @@ class GeminiAnswerer:
         self.resume = resume
 
     def answer_question_textual_wide_range(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\n{self.resume}\\n\\nAnswer the following question: {question}"
+        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nAnswer the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_numeric(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\n{self.resume}\\n\\nProvide a numeric answer to the following question: {question}"
+        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nProvide a numeric answer to the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_from_options(self, question: str, options: list) -> str:
-        options_str = "\\n".join(f"- {option}" for option in options)
-        prompt = f"Based on the resume information:\\n{self.resume}\\n\\nAnswer the following question by selecting the best option:\\n{question}\\n\\nOptions:\\n{options_str}"
+        options_str = "\\\n".join(f"- {option}" for option in options)
+        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nAnswer the following question by selecting the best option:\\\n{question}\\\n\\\nOptions:\\\n{options_str}"
         return self.generate_answer(prompt)
 
     def try_fix_answer(self, question: str, previous_answer: str, error_text: str) -> str:
-        prompt = f"Based on the resume information:\\n{self.resume}\\n\\nThe following question was asked: {question}\\n\\nThe previous answer was: {previous_answer}\\n\\nThis resulted in an error: {error_text}\\n\\nPlease provide a corrected answer that addresses the error."
+        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nThe following question was asked: {question}\\\n\\\nThe previous answer was: {previous_answer}\\\n\\\nThis resulted in an error: {error_text}\\\n\\\nPlease provide a corrected answer that addresses the error."
         return self.generate_answer(prompt)
 
     def get_resume_html(self) -> str:
-        prompt = f"Based on the resume information:\\n{self.resume}\\n\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
+        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
         return self.generate_answer(prompt)
 
 class ConfigValidator:
@@ -308,12 +308,14 @@ def main(resume: Path = None, premade_resume: Path = None):
         logging.debug("Data folder validated")
         
         parameters = ConfigValidator.validate_config(config_file)
+        premade_resume_path = parameters.get('premadeResumePath', None)
         logging.debug("Configuration validated")
         
         email, password, gemini_api_key = ConfigValidator.validate_secrets(secrets_file)
         logging.debug("Secrets validated")
         
-        parameters['uploads'] = FileManager.file_paths_to_dict(premade_resume or resume, plain_text_resume_file)
+        # Use premade_resume_path as default if no command-line argument is provided
+        parameters['uploads'] = FileManager.file_paths_to_dict(premade_resume or resume or Path(premade_resume_path), plain_text_resume_file)
         parameters['outputFileDirectory'] = output_folder
         logging.debug("File paths set in parameters")
 
