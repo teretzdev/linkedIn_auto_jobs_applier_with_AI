@@ -1,128 +1,103 @@
 personal_information:
-  name: "Mario"
-  surname: "Rossi"
-  dateOfBirth: "15/09/1988"
-  country: "Italy"
-  city: "Milan"
-  address: "Via Montenapoleone 10, 20121 Milan"
-  phonePrefix: "+39"
-  phone: "3351234567"
-  email: "mario.rossi@techcode.it"
-  github: "https://github.com/mario-rossi-dev"
-  linkedin: "https://www.linkedin.com/in/mario-rossi-developer/"
+  name: "[Your name]"
+  surname: "[Your surname]"
+  dateOfBirth: "[Your Date of Birth]"
+  country: "[Your country]"
+  city: "[Your city]"
+  address: "[Your address]"
+  phonePrefix: "[Your phone number prefix]"
+  phone: "[Your phone number]"
+  email: "[Your email]"
+  github: "[Link]"
+  linkedin: "[Link]"
 
 self_identification:
-  gender: "Male"
-  pronouns: "He/Him"
-  veteran: false
-  disability: false
-  ethnicity: "Mediterranean"
+  gender: "[Specific gender identification]"
+  pronouns: "[Your Pronouns]"
+  veteran: [true/false]
+  disability: [true/false]
+  ethnicity: "[Specify ethnicity]"
 
 legal_authorization:
-  euWorkAuthorization: true
-  usWorkAuthorization: false
-  requiresUsVisa: true
-  legallyAllowedToWorkInUs: false
-  requiresUsSponsorship: true
-  requiresEuVisa: false
-  legallyAllowedToWorkInEu: true
-  requiresEuSponsorship: false
+  euWorkAuthorization: [true/false]
+  usWorkAuthorization: [true/false]
+  requiresUsVisa: [true/false]
+  legallyAllowedToWorkInUs: [true/false]
+  requiresUsSponsorship: [true/false]
+  requiresEuVisa: [true/false]
+  legallyAllowedToWorkInEu: [true/false]
+  requiresEuSponsorship: [true/false]
 
 work_preferences:
-  remoteWork: true
-  inPersonWork: true
-  openToRelocation: true
-  willingToCompleteAssessments: true
-  willingToUndergoDrugTests: true
-  willingToUndergoBackgroundChecks: true
+  remoteWork: [true/false]
+  inPersonWork: [true/false]
+  openToRelocation: [true/false]
+  willingToCompleteAssessments: [true/false]
+  willingToUndergoDrugTests: [true/false]
+  willingToUndergoBackgroundChecks: [true/false]
 
 education_details:
-  - degree: "Master"
-    university: "Politecnico di Milano"
-    gpa: "3.8/4"
-    graduationYear: "2012"
-    fieldOfStudy: "Computer Engineering"
+  - degree: "[Bachelor's/Master's/Ph.D.]"
+    university: "[Name of University]"
+    gpa: "[Your GPA]"
+    graduationYear: "[Year of Graduation]"
+    fieldOfStudy: "[Your Field of Study]"
     skillsAcquired:
-      artificialIntelligence: "4"
-      dataScience: "3"
-      cloudComputing: "3"
+      leadership: "[Years]"
+      problemSolving: "[Years]"
+      criticalThinking: "[Years]"
+      adaptability: "[Years]"
+      perfectionism: "[Years]"
+      yourSkill: "[Years]"
+      yourSkill: "[Years]"
 
 experience_details:
-  - position: "Senior Software Engineer"
-    company: "TechInnovate S.p.A."
-    employmentPeriod: "06/2018 - Present"
-    location: "Milan, Italy"
-    industry: "FinTech"
+  - position: "[Job Title]"
+    company: "[Company Name]"
+    employmentPeriod: "[Month, Year] - [Month, Year]"
+    location: "[City, Country]"
+    industry: "[Industry of the Company]"
     keyResponsibilities:
-      responsibility1: "Led development of real-time trading algorithm, improving transaction speed by 40%"
-      responsibility2: "Implemented CI/CD pipeline, reducing deployment time from days to hours"
-      responsibility3: "Mentored junior developers, increasing team productivity by 25% over 6 months"
+      responsibility1: "[Description of responsibility1]"
+      responsibility2: "[Description of responsibility1]"
+      responsibility3: "[Description of responsibility1]"
     skillsAcquired:
-      java: "5"
-      springBoot: "4"
-      kubernetes: "3"
-      aws: "4"
-      microservices: "4"
-      agileMethodologies: "5"
+      leadership: "[Years]"
+      problemSolving: "[Years]"
+      criticalThinking: "[Years]"
+      adaptability: "[Years]"
+      perfectionism: "[Years]"
+      yourSkill: "[Years]"
+      yourSkill: "[Years]"
 
 projects:
-  project1: "Developed a high-frequency trading platform using Java and Spring Boot, processing over 1 million transactions per second"
-  project2: "Led the migration of legacy systems to a microservices architecture, improving system reliability by 99.99%"
+  project1: "[Description of significant projects you've worked on + if available repo link]"
+  project2: "[Description of significant projects you've worked on + if available repo link]"
 
 availability:
-  noticePeriod: "3 months"
+  noticePeriod: "[Specify notice period]"
 
 salary_expectations:
-  salaryRangeUSD: "90000"
+  salaryRangeUSD: "[Specify your salary expectations in USD]"
 
 certifications:
-  - "AWS Certified Solutions Architect"
-  - "Oracle Certified Professional, Java SE 11 Developer"
-  - "Certified Scrum Master"
-  
+  - "[Certification 1]"
+  - "[Certification 2]"
+  - "[Certification 3]"
+
 skills:
-  leadership: 6
-  problemSolving: 4
-  criticalThinking: 3
-  adaptability: 2
-  perfectionism: 2
-  blockchain: 3
-  iot: 3
-  python: 3
-  fullStackDevelopment: 3
-  databaseManagement: 3
-  versionControl: 3
-  agileMethodologies: 2
-  devOpsPractices: 2
-  algorithmDesign: 3
-  mobileAppDevelopment: 2
-  softwareArchitecture: 3
-  teamCollaboration: 2
-  documentation: 2
-  java: 3
-  cSharp: 3
-  c: 3
-  cPlusPlus: 3
-  javascript: 3
-  php: 3
-  sql: 3
-  noSql: 3
-  mysql: 3
-  firebase: 3
-  continuousIntegration: 2
-  continuousDeployment: 2
-  optimization: 3
+  problemSolving: "[Years]"
+  criticalThinking: "[Years]"
+  adaptability: "[Years]"
+  perfectionism: "[Years]"
+  yourSkill: "[Years]"
+  yourSkill: "[Years]"
 
 languages:
   - language: "Italian"
     proficiency: "Native"
   - language: "English"
-    proficiency: "Fluent"
-  - language: "Spanish"
-    proficiency: "Intermediate"
+    proficiency: "Professional"
 
 interests:
-  - "Open Source Contributing"
-  - "Machine Learning"
-  - "Hiking"
-  - "Chess"
+  - "[List any hobbies or interests relevant to your professional profile]"
