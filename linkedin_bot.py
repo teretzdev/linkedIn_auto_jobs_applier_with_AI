@@ -148,17 +148,22 @@ class FileManager:
         return secrets_file, config_file, plain_text_resume_file, output_folder
 
     @staticmethod
-    def file_paths_to_dict(resume_file: Path | None, plain_text_resume_file: Path) -> dict:
+    def file_paths_to_dict(resume_file: Path | None, plain_text_resume_file: Path, config: dict) -> dict:
         if not plain_text_resume_file.exists():
             raise FileNotFoundError(f"Plain text resume file not found: {plain_text_resume_file}")
-        
+    
         result = {'plainTextResume': plain_text_resume_file}
-        
+    
+        if resume_file is None:
+            default_resume_path = config.get('default_resume_path')
+            if default_resume_path:
+                resume_file = Path(default_resume_path)
+                if not resume_file.exists():
+                    raise FileNotFoundError(f"Default resume file not found: {resume_file}")
+    
         if resume_file is not None:
-            if not resume_file.exists():
-                raise FileNotFoundError(f"Resume file not found: {resume_file}")
             result['resume'] = resume_file
-        
+    
         return result
 
 def init_browser():

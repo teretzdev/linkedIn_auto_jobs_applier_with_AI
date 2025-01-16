@@ -40,6 +40,8 @@ companyBlacklist:
   - Company1
   - Company2
 
+default_resume_path: 'data_folder/resume.pdf'
+
 titleBlacklist:
   - word1
   - word2

@@ -158,12 +158,8 @@ class LinkedInEasyApplier:
             parent = element.find_element(By.XPATH, "..")
             self.driver.execute_script("arguments[0].classList.remove('hidden')", element)
             if 'resume' in parent.text.lower():
-                available_resumes = list(Path('resumes').glob('*.pdf'))
-                selected_resume = self._select_premade_resume(available_resumes)
-                if selected_resume:
-                    self._preview_resume(selected_resume)
-                    element.send_keys(str(selected_resume.resolve()))
-                elif self.resume_dir is not None:
+                # Use the resume path provided at runtime
+                if self.resume_dir is not None:
                     resume_path = self.resume_dir.resolve()
                     if resume_path.exists() and resume_path.is_file():
                         self._preview_resume(resume_path)
@@ -211,7 +207,7 @@ class LinkedInEasyApplier:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \\nTraceback:\\n{tb_str}")
+                    raise Exception(f"Max retries reached. Upload failed: \\\nTraceback:\\\n{tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
         element.send_keys(str(self.resume_dir))
