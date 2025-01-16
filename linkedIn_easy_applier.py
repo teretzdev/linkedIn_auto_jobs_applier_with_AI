@@ -37,10 +37,21 @@ class LinkedInEasyApplier:
 
     def _preview_resume(self, resume_path: Path) -> None:
         try:
-            with open(resume_path, 'r') as file:
-                resume_content = file.read()
-            print("Resume Preview:")
-            print(resume_content)
+            if resume_path.suffix.lower() == '.pdf':
+                # Preview PDF resume
+                try:
+                    from PyPDF2 import PdfReader
+                    reader = PdfReader(str(resume_path))
+                    print("Resume Preview (PDF):")
+                    for page in reader.pages:
+                        print(page.extract_text())
+                except Exception as e:
+                    print(f"Error previewing PDF resume: {str(e)}")
+            else:
+                with open(resume_path, 'r') as file:
+                    resume_content = file.read()
+                print("Resume Preview:")
+                print(resume_content)
         except Exception as e:
             print(f"Error previewing resume: {str(e)}")
 
@@ -207,7 +218,7 @@ class LinkedInEasyApplier:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \\\\nTraceback:\\\\n{tb_str}")
+                    raise Exception(f"Max retries reached. Upload failed: \\\\\nTraceback:\\\\\n{tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
         element.send_keys(str(self.resume_dir))
