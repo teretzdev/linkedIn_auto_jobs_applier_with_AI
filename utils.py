@@ -25,7 +25,7 @@ logging.basicConfig(
 
 def get_gemini_response(prompt):
     logging.debug(f"Generating response for prompt: {prompt}")
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-flash-1.5')
     response = model.generate_content(prompt)
     logging.debug(f"Received response: {response.text}")
     return response.text

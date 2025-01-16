@@ -33,8 +33,8 @@ class GeminiAnswerer:
     def __init__(self, api_key: str):
         logging.debug("Initializing GeminiAnswerer")
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-pro-latest')
-        logging.debug("GeminiAnswerer initialized with model 'gemini-1.5-pro-latest'")
+        self.model = genai.GenerativeModel('gemini-flash-1.5')
+        logging.debug("GeminiAnswerer initialized with model 'gemini-flash-1.5'")
 
     def generate_answer(self, prompt: str) -> str:
         logging.debug(f"Generating answer for prompt: {prompt}")
@@ -46,24 +46,24 @@ class GeminiAnswerer:
         self.resume = resume
 
     def answer_question_textual_wide_range(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nAnswer the following question: {question}"
+        prompt = f"Based on the resume information:\\\\\n{self.resume}\\\\\n\\\\\nAnswer the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_numeric(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nProvide a numeric answer to the following question: {question}"
+        prompt = f"Based on the resume information:\\\\\n{self.resume}\\\\\n\\\\\nProvide a numeric answer to the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_from_options(self, question: str, options: list) -> str:
-        options_str = "\\\\n".join(f"- {option}" for option in options)
-        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nAnswer the following question by selecting the best option:\\\\n{question}\\\\n\\\\nOptions:\\\\n{options_str}"
+        options_str = "\\\\\n".join(f"- {option}" for option in options)
+        prompt = f"Based on the resume information:\\\\\n{self.resume}\\\\\n\\\\\nAnswer the following question by selecting the best option:\\\\\n{question}\\\\\n\\\\\nOptions:\\\\\n{options_str}"
         return self.generate_answer(prompt)
 
     def try_fix_answer(self, question: str, previous_answer: str, error_text: str) -> str:
-        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nThe following question was asked: {question}\\\\n\\\\nThe previous answer was: {previous_answer}\\\\n\\\\nThis resulted in an error: {error_text}\\\\n\\\\nPlease provide a corrected answer that addresses the error."
+        prompt = f"Based on the resume information:\\\\\n{self.resume}\\\\\n\\\\\nThe following question was asked: {question}\\\\\n\\\\\nThe previous answer was: {previous_answer}\\\\\n\\\\\nThis resulted in an error: {error_text}\\\\\n\\\\\nPlease provide a corrected answer that addresses the error."
         return self.generate_answer(prompt)
 
     def get_resume_html(self) -> str:
-        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
+        prompt = f"Based on the resume information:\\\\\n{self.resume}\\\\\n\\\\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
         return self.generate_answer(prompt)
 
 class ConfigValidator:
