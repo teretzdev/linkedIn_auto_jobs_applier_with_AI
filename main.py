@@ -46,24 +46,24 @@ class GeminiAnswerer:
         self.resume = resume
 
     def answer_question_textual_wide_range(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nAnswer the following question: {question}"
+        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nAnswer the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_numeric(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nProvide a numeric answer to the following question: {question}"
+        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nProvide a numeric answer to the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_from_options(self, question: str, options: list) -> str:
-        options_str = "\\\n".join(f"- {option}" for option in options)
-        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nAnswer the following question by selecting the best option:\\\n{question}\\\n\\\nOptions:\\\n{options_str}"
+        options_str = "\\\\n".join(f"- {option}" for option in options)
+        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nAnswer the following question by selecting the best option:\\\\n{question}\\\\n\\\\nOptions:\\\\n{options_str}"
         return self.generate_answer(prompt)
 
     def try_fix_answer(self, question: str, previous_answer: str, error_text: str) -> str:
-        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nThe following question was asked: {question}\\\n\\\nThe previous answer was: {previous_answer}\\\n\\\nThis resulted in an error: {error_text}\\\n\\\nPlease provide a corrected answer that addresses the error."
+        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nThe following question was asked: {question}\\\\n\\\\nThe previous answer was: {previous_answer}\\\\n\\\\nThis resulted in an error: {error_text}\\\\n\\\\nPlease provide a corrected answer that addresses the error."
         return self.generate_answer(prompt)
 
     def get_resume_html(self) -> str:
-        prompt = f"Based on the resume information:\\\n{self.resume}\\\n\\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
+        prompt = f"Based on the resume information:\\\\n{self.resume}\\\\n\\\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
         return self.generate_answer(prompt)
 
 class ConfigValidator:
@@ -250,7 +250,7 @@ def init_browser():
         logging.error(f"Failed to initialize browser: {str(e)}")
         raise RuntimeError(f"Failed to initialize browser: {str(e)}")
 
-def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_key: str):
+def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_key: str, premade_resume: Path = None):
     logging.debug("Creating and running the bot")
     try:
         browser = init_browser()
@@ -273,10 +273,15 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
         apply_component.set_gpt_answerer(gpt_answerer_component)
         logging.debug("GPTAnswerer set in LinkedInJobManager")
         
-        with open(parameters['uploads']['plainTextResume'], "r") as file:
-            plain_text_resume_file = file.read()
-        resume_object = Resume(plain_text_resume_file)
-        logging.debug("Resume object created")
+        # Use premade resume if provided
+        if premade_resume:
+            resume_object = Resume(premade_resume.read_text())
+            logging.debug("Premade resume object created")
+        else:
+            with open(parameters['uploads']['plainTextResume'], "r") as file:
+                plain_text_resume_file = file.read()
+            resume_object = Resume(plain_text_resume_file)
+            logging.debug("Resume object created")
         
         # Pass browser as the third argument to LinkedInBotFacade
         bot = LinkedInBotFacade(login_component, apply_component, browser)

@@ -165,7 +165,7 @@ class LinkedInEasyApplier:
                         self._preview_resume(resume_path)
                         element.send_keys(str(resume_path))
                     else:
-                        self._create_and_upload_resume(element)
+                        print("Premade resume not found. Please ensure the resume path is correct.")
             elif 'cover' in parent.text.lower():
                 self._create_and_upload_cover_letter(element)
 
@@ -207,7 +207,7 @@ class LinkedInEasyApplier:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \\\nTraceback:\\\n{tb_str}")
+                    raise Exception(f"Max retries reached. Upload failed: \\\\nTraceback:\\\\n{tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
         element.send_keys(str(self.resume_dir))
