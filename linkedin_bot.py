@@ -158,8 +158,8 @@ class FileManager:
             default_resume_path = config.get('default_resume_path')
             if default_resume_path:
                 resume_file = Path(default_resume_path)
-                if not resume_file.exists():
-                    raise FileNotFoundError(f"Default resume file not found: {resume_file}")
+                if not resume_file.exists() or not resume_file.is_file():
+                    raise FileNotFoundError(f"Default resume file not found or is not a valid file: {resume_file}")
     
         if resume_file is not None:
             result['resume'] = resume_file

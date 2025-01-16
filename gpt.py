@@ -85,11 +85,19 @@ class GPTAnswerer:
         resume_markdown_chain = resume_markdown_prompt | self.llm_cheap | StrOutputParser()
         fusion_job_description_resume_chain = fusion_job_description_resume_prompt | self.llm_cheap | StrOutputParser()
         
-        casual_markdown_path = os.path.abspath("resume_template/casual_markdown.js")
-        reorganize_header_path = os.path.abspath("resume_template/reorganizeHeader.js")
-        resume_css_path = os.path.abspath("resume_template/resume.css")
+        try:
+            casual_markdown_path = os.path.abspath("resume_template/casual_markdown.js")
+            reorganize_header_path = os.path.abspath("resume_template/reorganizeHeader.js")
+            resume_css_path = os.path.abspath("resume_template/resume.css")
+        except Exception as e:
+            print(f"Error resolving file paths: {str(e)}")
+            return None
 
-        html_template = strings.html_template.format(casual_markdown=casual_markdown_path, reorganize_header=reorganize_header_path, resume_css=resume_css_path)
+        try:
+            html_template = strings.html_template.format(casual_markdown=casual_markdown_path, reorganize_header=reorganize_header_path, resume_css=resume_css_path)
+        except KeyError as e:
+            print(f"Error formatting HTML template: Missing key {str(e)}")
+            return None
         composed_chain = (
             resume_markdown_chain
             | (lambda output: {"job_description": self.job.summarize_job_description, "formatted_resume": output})
@@ -97,14 +105,15 @@ class GPTAnswerer:
             | (lambda formatted_resume: html_template + formatted_resume)
         )
         try:
-            output = composed_chain.invoke({
-                "resume": self.resume,
-                "job_description": self.job.summarize_job_description
-            })
-            return output
-        except Exception as e:
-            #print(f"Error during elaboration: {e}")
-            pass
+            try:
+                output = composed_chain.invoke({
+                    "resume": self.resume,
+                    "job_description": self.job.summarize_job_description
+                })
+                return output
+            except Exception as e:
+                print(f"Error during resume HTML generation: {str(e)}")
+                return None
         
 
     def _create_chain(self, template: str):
