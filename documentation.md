@@ -14,6 +14,10 @@ This document provides detailed instructions for setting up and using the Linked
    ```bash
    pip install -r requirements.txt
    ```
+   - If you encounter issues with `webdriver_manager`, ensure it is installed by running:
+     ```bash
+     pip install webdriver_manager
+     ```
 
 4. **RabbitMQ**: Ensure RabbitMQ is installed and running if using the job queue feature.
 
@@ -126,6 +130,13 @@ Follow these steps to set up the project:
 4. **Application Errors**:
    - Check logs for detailed error messages.
    - Ensure the bot has access to the LinkedIn job application pages.
+
+5. **`webdriver_manager` Import Error**:
+   - If you encounter an error related to `webdriver_manager`, ensure it is installed by running:
+     ```bash
+     pip install webdriver_manager
+     ```
+   - Verify that your Python environment is correctly set up and active.
 
 ---
 
