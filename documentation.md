@@ -64,6 +64,51 @@ This document provides detailed instructions for setting up and using the Linked
 
 ---
 
+## Dual Environment Setup
+
+### Overview
+This project requires both Python and Node.js environments to function correctly. Python is used for backend automation and data processing, while Node.js is utilized for frontend interactions and additional utilities. This dual setup ensures modularity and leverages the strengths of both ecosystems.
+
+### Setting Up the Project
+Follow these steps to set up the project:
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/teretzdev/linkedIn_auto_jobs_applier_with_AI.git
+   cd linkedIn_auto_jobs_applier_with_AI
+   ```
+
+2. **Python Environment**:
+   - Ensure Python 3.8 or higher is installed.
+   - Create and activate a virtual environment:
+     ```bash
+     python3 -m venv venv
+     source venv/bin/activate  # On Windows: venv\Scripts\activate.bat
+     ```
+   - Install Python dependencies:
+     ```bash
+     pip install -r requirements.txt
+     ```
+
+3. **Node.js Environment**:
+   - Ensure Node.js and npm are installed.
+   - Install Node.js dependencies:
+     ```bash
+     npm install
+     ```
+
+4. **Unified Setup Script**:
+   - Alternatively, you can use the `setup.sh` script to automate the setup process:
+     ```bash
+     ./setup.sh
+     ```
+   - Ensure the Python virtual environment is activated before running the script.
+
+5. **Configuration**:
+   - Follow the instructions in the "Configuration" section below to set up necessary files like `secrets.yaml` and `config.yaml`.
+
+---
+
 ## Troubleshooting
 
 ### Common Issues
