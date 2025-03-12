@@ -46,24 +46,24 @@ class GeminiAnswerer:
         self.resume = resume
 
     def answer_question_textual_wide_range(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\\\\\n{self.resume}\\\\\\n\\\\\\nAnswer the following question: {question}"
+        prompt = f"Based on the resume information:\\\\\\\n{self.resume}\\\\\\\n\\\\\\\nAnswer the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_numeric(self, question: str) -> str:
-        prompt = f"Based on the resume information:\\\\\\n{self.resume}\\\\\\n\\\\\\nProvide a numeric answer to the following question: {question}"
+        prompt = f"Based on the resume information:\\\\\\\n{self.resume}\\\\\\\n\\\\\\\nProvide a numeric answer to the following question: {question}"
         return self.generate_answer(prompt)
 
     def answer_question_from_options(self, question: str, options: list) -> str:
-        options_str = "\\\\\\n".join(f"- {option}" for option in options)
-        prompt = f"Based on the resume information:\\\\\\n{self.resume}\\\\\\n\\\\\\nAnswer the following question by selecting the best option:\\\\\\n{question}\\\\\\n\\\\\\nOptions:\\\\\\n{options_str}"
+        options_str = "\\\\\\\n".join(f"- {option}" for option in options)
+        prompt = f"Based on the resume information:\\\\\\\n{self.resume}\\\\\\\n\\\\\\\nAnswer the following question by selecting the best option:\\\\\\\n{question}\\\\\\\n\\\\\\\nOptions:\\\\\\\n{options_str}"
         return self.generate_answer(prompt)
 
     def try_fix_answer(self, question: str, previous_answer: str, error_text: str) -> str:
-        prompt = f"Based on the resume information:\\\\\\n{self.resume}\\\\\\n\\\\\\nThe following question was asked: {question}\\\\\\n\\\\\\nThe previous answer was: {previous_answer}\\\\\\n\\\\\\nThis resulted in an error: {error_text}\\\\\\n\\\\\\nPlease provide a corrected answer that addresses the error."
+        prompt = f"Based on the resume information:\\\\\\\n{self.resume}\\\\\\\n\\\\\\\nThe following question was asked: {question}\\\\\\\n\\\\\\\nThe previous answer was: {previous_answer}\\\\\\\n\\\\\\\nThis resulted in an error: {error_text}\\\\\\\n\\\\\\\nPlease provide a corrected answer that addresses the error."
         return self.generate_answer(prompt)
 
     def get_resume_html(self) -> str:
-        prompt = f"Based on the resume information:\\\\\\n{self.resume}\\\\\\n\\\\\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
+        prompt = f"Based on the resume information:\\\\\\\n{self.resume}\\\\\\\n\\\\\\\nGenerate an HTML version of this resume that is suitable for uploading to job application websites."
         return self.generate_answer(prompt)
 
 class ConfigValidator:
@@ -245,6 +245,7 @@ def init_browser():
         service = ChromeService(ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service, options=options)
         logging.info("Browser initialized successfully")
+        printyellow("Browser successfully initialized. Proceeding with the application.")
         return browser
     except Exception as e:
         logging.error(f"Failed to initialize browser: {str(e)}")
@@ -302,8 +303,7 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
         logging.info("Bot started application process")
     except Exception as e:
         logging.error(f"Error running the bot: {str(e)}")
-        printyellow("Bot creation or execution failed. Check configuration and runtime dependencies.")
-        printyellow("Refer to the troubleshooting guide: https://github.com/feder-cr/LinkedIn_AIHawk_automatic_job_application/blob/main/readme.md#troubleshooting")
+        printyellow("An error occurred while running the bot. Please check the logs for details.")
         raise RuntimeError(f"Error running the bot: {str(e)}")
 
 @click.command()

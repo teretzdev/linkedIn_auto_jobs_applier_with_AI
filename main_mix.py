@@ -185,14 +185,14 @@ def main_mix():
 
         # Initialize Resume with opened file instead of Path object
         with open(parameters['uploads']['plainTextResume'], 'r') as resume_file:
-            resume_obj = Resume(resume_file)
+            resume_content = resume_file.read()
+            resume_obj = Resume(resume_content)
 
         # Initialize LinkedInBotFacade with the browser
         bot = LinkedInBotFacade(browser, wait)
         bot.set_secrets(email, password)
         bot.set_resume(resume_obj)
-        # Remove the following line as it's causing the error
-        # bot.set_gpt_answerer(gpt_answerer)
+        bot.set_gpt_answerer(gpt_answerer)  # Ensure GPTAnswerer is properly set
 
         login_to_linkedin(bot, email, password)
         perform_searches(browser, wait)
