@@ -45,26 +45,41 @@ class GPTAnswerer:
     # self.google_api_key = google_api_key
 
     def _query_gemini(self, prompts):
+        if not hasattr(self, 'endpoint'):
+            raise AttributeError("Gemini API endpoint is not configured. Please initialize it properly.")
+        
         response = self.endpoint.generate_content(instances=[{"content": prompts[0].content}])
-        return {'output': {'output': response.predictions[0]["content"]}}
+        if response and response.predictions:
+            return {'output': {'output': response.predictions[0]["content"]}}
+        else:
+            raise ValueError("Invalid response from Gemini API.")
 
     @staticmethod
     def find_best_match(text: str, options: list[str]) -> str:
+        from difflib import SequenceMatcher
+
+        def similarity(a, b):
+            return SequenceMatcher(None, a, b).ratio()
+
         distances = [
-            (option, distance(text.lower(), option.lower())) for option in options
+            (option, similarity(text.lower(), option.lower())) for option in options
         ]
-        best_match_index = similarity_scores.index(max(similarity_scores))
-        return options[best_match_index]
+        best_match = max(distances, key=lambda x: x[1])
+        return best_match[0]
 
     @staticmethod
     def _remove_placeholders(text: str) -> str:
-        text = text.replace("PLACEHOLDER", "")
-        return text.strip()
+        if text:
+            text = text.replace("PLACEHOLDER", "")
+            return text.strip()
+        return ""
 
     @staticmethod
     def _preprocess_template_string(template: str) -> str:
         # Preprocess a template string to remove unnecessary indentation.
-        return textwrap.dedent(template)
+        import textwrap
+
+        return textwrap.dedent(template).strip()
 
     def set_resume(self, resume):
         self.resume = resume
