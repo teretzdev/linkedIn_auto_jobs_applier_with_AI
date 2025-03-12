@@ -28,8 +28,9 @@ fi
 # Check if a Python virtual environment is activated
 if [ -z "$VIRTUAL_ENV" ]; then
     echo "Python virtual environment is not activated."
-    echo "Please activate your virtual environment and run this script again."
-    exit 1
+    echo "Creating and activating a virtual environment..."
+    python3 -m venv venv
+    source venv/bin/activate
 fi
 
 # Upgrade pip

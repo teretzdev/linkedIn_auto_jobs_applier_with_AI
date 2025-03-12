@@ -80,16 +80,20 @@ LinkedIn_AIHawk steps in as a game-changing solution to these challenges. It's n
    - [How to Install Python on Linux](https://www.geeksforgeeks.org/how-to-install-python-on-linux/)
    - [How to Download and Install Python on macOS](https://www.geeksforgeeks.org/how-to-download-and-install-python-latest-version-on-macos-mac-os-x/)
 
-2. **Download and Install Google Chrome:**
+2. **Download and Install Node.js:**
+
+   Ensure you have Node.js installed. If not, download and install it from Node.js's official website: [Node.js Downloads](https://nodejs.org/).
+
+3. **Download and Install Google Chrome:**
    - Download and install the latest version of Google Chrome in its default location from the [official website](https://www.google.com/chrome).
 
-3. **Clone the repository:**
+4. **Clone the repository:**
    ```bash
    git clone https://github.com/feder-cr/LinkedIn_AIHawk_automatic_job_application
    cd LinkedIn_AIHawk_automatic_job_application
    ```
 
-4. **Create a `.env` file:**
+5. **Create a `.env` file:**
 
    Copy the `.env.example` file to `.env` and fill in the required environment variables:
    ```bash
@@ -101,12 +105,31 @@ LinkedIn_AIHawk steps in as a game-changing solution to these challenges. It's n
    - `OPENAI_API_KEY`: Your OpenAI API key for accessing GPT services.
    - `GOOGLE_API_KEY`: Your Google API key for accessing Google services.
 
-5. **Install the required packages:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+6. **Set up Python environment:**
+   - Create and activate a virtual environment:
+     ```bash
+     python3 -m venv venv
+     source venv/bin/activate  # On Windows: venv\Scripts\activate.bat
+     ```
+   - Install Python dependencies:
+     ```bash
+     pip install -r requirements.txt
+     ```
 
-6. **Run the application:**
+7. **Set up Node.js environment:**
+   - Install Node.js dependencies:
+     ```bash
+     npm install
+     ```
+
+8. **Unified Setup Script (Optional):**
+   - Use the `setup.sh` script to automate the setup process:
+     ```bash
+     ./setup.sh
+     ```
+   - Ensure the Python virtual environment is activated before running the script.
+
+9. **Run the application:**
 
    To start the application, use the following command:
    ```bash
