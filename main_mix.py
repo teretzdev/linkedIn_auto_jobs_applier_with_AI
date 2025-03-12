@@ -180,16 +180,19 @@ def main_mix():
             google_api_key=gemini_api_key
         )
 
+        if gpt_answerer is None:
+            raise ValueError("GPTAnswerer component is not initialized. Please check the configuration.")
+
         # Initialize Resume with opened file instead of Path object
         with open(parameters['uploads']['plainTextResume'], 'r') as resume_file:
-            resume_obj = Resume(resume_file)
+            resume_content = resume_file.read()
+            resume_obj = Resume(resume_content)
 
         # Initialize LinkedInBotFacade with the browser
         bot = LinkedInBotFacade(browser, wait)
         bot.set_secrets(email, password)
         bot.set_resume(resume_obj)
-        # Remove the following line as it's causing the error
-        # bot.set_gpt_answerer(gpt_answerer)
+        bot.set_gpt_answerer(gpt_answerer)  # Ensure GPTAnswerer is properly set
 
         login_to_linkedin(bot, email, password)
         perform_searches(browser, wait)

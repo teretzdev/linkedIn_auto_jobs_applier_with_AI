@@ -135,6 +135,8 @@ class FileManager:
         plain_text_resume_file = app_data_folder / 'plain_text_resume.yaml'
         
         missing_files = []
+        if not secrets_file.exists():
+            missing_files.append('secrets.yaml')
         if not config_file.exists():
             missing_files.append('config.yaml')
         if not plain_text_resume_file.exists():
@@ -179,8 +181,11 @@ def create_and_run_bot(email: str, password: str, parameters: dict, gemini_api_k
         browser = init_browser()
         login_component = LinkedInAuthenticator(browser)
         apply_component = LinkedInJobManager(browser)
-        gpt_answerer_component = GPTAnswerer(gemini_api_key=gemini_api_key) # Pass Gemini API key to GPTAnswerer
-        with open(parameters['uploads']['plainTextResume'], "r") as file:
+        gpt_answerer_component = GPTAnswerer(
+            openai_api_key=parameters.get('openai_api_key'),
+            google_api_key=gemini_api_key
+        )  # Pass both OpenAI and Gemini API keys to GPTAnswerer
+        with open(parameters['uploads']['plainTextResume'], "r", encoding="utf-8") as file:
             plain_text_resume_file = file.read()
         resume_object = Resume(plain_text_resume_file)
         bot = LinkedInBotFacade(login_component, apply_component)

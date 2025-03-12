@@ -14,11 +14,9 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select, WebDriverWait
-import tempfile
-import time
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
 import io
 import time
 from reportlab.lib.pagesizes import letter
@@ -87,18 +85,23 @@ class LinkedInEasyApplier:
                 break
 
     def _next_or_submit(self):
-        next_button = self.driver.find_element(By.CLASS_NAME, "artdeco-button--primary")
-        button_text = next_button.text.lower()
-        if 'submit application' in button_text:
-            self._unfollow_company()
+        try:
+            next_button = self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "artdeco-button--primary")))
+            button_text = next_button.text.lower()
+            if 'submit application' in button_text:
+                self._unfollow_company()
+                time.sleep(random.uniform(1.5, 2.5))
+                next_button.click()
+                time.sleep(random.uniform(1.5, 2.5))
+                return True
             time.sleep(random.uniform(1.5, 2.5))
             next_button.click()
-            time.sleep(random.uniform(1.5, 2.5))
-            return True
-        time.sleep(random.uniform(1.5, 2.5))
-        next_button.click()
-        time.sleep(random.uniform(3.0, 5.0))
-        self._check_for_errors()
+            time.sleep(random.uniform(3.0, 5.0))
+            self._check_for_errors()
+        except TimeoutException:
+            print("Next or submit button not found or not clickable.")
+        except Exception as e:
+            print(f"Error in navigating application steps: {str(e)}")
 
 
     def _unfollow_company(self) -> None:
@@ -128,7 +131,7 @@ class LinkedInEasyApplier:
             for element in pb4_elements:
                 self._process_form_element(element)
         except Exception as e:
-            pass
+            print(f"Error filling up the application form: {str(e)}")
         
 
 
@@ -159,13 +162,15 @@ class LinkedInEasyApplier:
             self.driver.execute_script("arguments[0].classList.remove('hidden')", element)
             if 'resume' in parent.text.lower():
                 # Use the resume path provided at runtime
-                if self.resume_dir is not None:
-                    resume_path = self.resume_dir.resolve()
+                if self.resume_dir:
+                    resume_path = Path(self.resume_dir).resolve()
                     if resume_path.exists() and resume_path.is_file():
                         self._preview_resume(resume_path)
                         element.send_keys(str(resume_path))
                     else:
                         print("Premade resume not found. Please ensure the resume path is correct.")
+                else:
+                    print("Resume directory is not set. Please provide a valid resume directory.")
             elif 'cover' in parent.text.lower():
                 self._create_and_upload_cover_letter(element)
 
@@ -207,10 +212,13 @@ class LinkedInEasyApplier:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \\\\nTraceback:\\\\n{tb_str}")
+                    raise Exception(f"Max retries reached. Upload failed: \\\\\\nTraceback:\\\\\\n{tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
-        element.send_keys(str(self.resume_dir))
+        if self.resume_dir:
+            element.send_keys(str(self.resume_dir))
+        else:
+            print("Resume directory is not set. Please provide a valid resume directory.")
 
     def _create_and_upload_cover_letter(self, element: WebElement) -> None:
         cover_letter = self.gpt_answerer.answer_question_textual_wide_range("Write a cover letter")
