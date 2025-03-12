@@ -135,6 +135,8 @@ class FileManager:
         plain_text_resume_file = app_data_folder / 'plain_text_resume.yaml'
         
         missing_files = []
+        if not secrets_file.exists():
+            missing_files.append('secrets.yaml')
         if not config_file.exists():
             missing_files.append('config.yaml')
         if not plain_text_resume_file.exists():

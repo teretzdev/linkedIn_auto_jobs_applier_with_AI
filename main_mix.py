@@ -180,6 +180,9 @@ def main_mix():
             google_api_key=gemini_api_key
         )
 
+        if gpt_answerer is None:
+            raise ValueError("GPTAnswerer component is not initialized. Please check the configuration.")
+
         # Initialize Resume with opened file instead of Path object
         with open(parameters['uploads']['plainTextResume'], 'r') as resume_file:
             resume_obj = Resume(resume_file)
