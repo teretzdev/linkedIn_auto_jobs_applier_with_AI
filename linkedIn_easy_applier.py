@@ -212,11 +212,14 @@ class LinkedInEasyApplier:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \\\\\\nTraceback:\\\\\\n{tb_str}")
+                    raise Exception(f"Max retries reached. Upload failed: \\\\\\\nTraceback:\\\\\\\n{tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
         if self.resume_dir:
-            element.send_keys(str(self.resume_dir))
+            if self.resume_dir:
+                element.send_keys(str(self.resume_dir))
+            else:
+                print("Resume directory is not set. Please provide a valid resume directory.")
         else:
             print("Resume directory is not set. Please provide a valid resume directory.")
 
