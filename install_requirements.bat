@@ -26,4 +26,5 @@ if %errorlevel% neq 0 (
 )
 
 echo Requirements installed successfully.
+echo Note: This script only installs Python dependencies. To install Node.js dependencies, run 'npm install'.
 pause
