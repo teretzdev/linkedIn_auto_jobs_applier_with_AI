@@ -30,20 +30,26 @@ positions:
   - React developer
   - Magento developer
   - Wordpress developer
+  - Python developer
+  - Data scientist
 
 locations:
   - United States
+  - Canada
+  - Remote
   
-distance: 100
+distance: 50
 
 companyBlacklist:
   - Company1
   - Company2
+  - Company3
 
 default_resume_path: 'data_folder/resume.pdf'
 
 titleBlacklist:
   - word1
   - word2
+  - word3
 
 credentialsFilePath: "data_folder/secrets.yaml"  # Path to the secrets file containing credentials

@@ -31,11 +31,16 @@ JOB_QUEUE = 'linkedin_jobs_to_apply'
 RESULT_QUEUE = 'linkedin_application_results'
 
 def connect_to_rabbitmq():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST))
-    channel = connection.channel()
-    channel.queue_declare(queue=JOB_QUEUE, durable=True)
-    channel.queue_declare(queue=RESULT_QUEUE, durable=True)
-    return connection, channel
+    try:
+        connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST))
+        channel = connection.channel()
+        channel.queue_declare(queue=JOB_QUEUE, durable=True)
+        channel.queue_declare(queue=RESULT_QUEUE, durable=True)
+        logging.info("Connected to RabbitMQ successfully")
+        return connection, channel
+    except pika.exceptions.AMQPConnectionError as e:
+        logging.error(f"Failed to connect to RabbitMQ: {str(e)}")
+        raise
 
 def save_screenshot_with_error(browser, error_msg, element_name):
     """Save a screenshot with error message when a selector fails"""
@@ -92,8 +97,9 @@ def get_job_listings(browser, wait):
             for job in job_list:
                 job_title = job.find_element(By.CSS_SELECTOR, "h3").text
                 job_id = job.get_attribute("data-job-id")
-                jobs.append({'title': job_title, 'id': job_id})
-                logging.debug(f"Found job: {job_title} with ID: {job_id}")
+                company_name = job.find_element(By.CSS_SELECTOR, ".base-search-card__subtitle").text
+                jobs.append({'title': job_title, 'id': job_id, 'company': company_name})
+                logging.debug(f"Found job: {job_title} at {company_name} with ID: {job_id}")
             return jobs
         except (NoSuchElementException, StaleElementReferenceException, TimeoutException) as e:
             if attempt < max_retries - 1:
@@ -108,10 +114,12 @@ def navigate_pagination(browser, wait):
     try:
         next_button = wait.until(EC.presence_of_element_located((By.XPATH, "//button[@aria-label='View next page']")))
         if next_button.is_enabled():
-            logging.info("Next page button found")
+            logging.info("Next page button found and enabled")
             return next_button
+        else:
+            logging.info("Next page button found but disabled")
     except (NoSuchElementException, TimeoutException) as e:
-        logging.info("Next page button not found or not clickable")
+        logging.warning(f"Next page button not found or not clickable: {str(e)}")
     return None
 
 def apply_to_job(browser, job_id, easy_applier, applied_jobs):
@@ -144,12 +152,17 @@ def save_applied_job(job_id, status):
     try:
         with open(filename, 'r+') as f:
             data = json.load(f)
-            data.append(job_id)
-            f.seek(0)
-            json.dump(data, f)
+            if job_id not in data:
+                data.append(job_id)
+                f.seek(0)
+                json.dump(data, f)
+                logging.info(f"Job ID {job_id} saved with status {status}")
+            else:
+                logging.info(f"Job ID {job_id} already exists in {filename}")
     except FileNotFoundError:
         with open(filename, 'w') as f:
             json.dump([job_id], f)
+        logging.info(f"Created new file {filename} and saved Job ID {job_id} with status {status}")
 
 def load_applied_jobs():
     applied_jobs = set()

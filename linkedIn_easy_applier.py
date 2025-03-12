@@ -162,15 +162,13 @@ class LinkedInEasyApplier:
             self.driver.execute_script("arguments[0].classList.remove('hidden')", element)
             if 'resume' in parent.text.lower():
                 # Use the resume path provided at runtime
-                if self.resume_dir:
-                    resume_path = Path(self.resume_dir).resolve()
-                    if resume_path.exists() and resume_path.is_file():
-                        self._preview_resume(resume_path)
-                        element.send_keys(str(resume_path))
-                    else:
-                        print("Premade resume not found. Please ensure the resume path is correct.")
+                resume_path = Path(self.resume_dir).resolve() if self.resume_dir else None
+                if resume_path and resume_path.exists() and resume_path.is_file():
+                    self._preview_resume(resume_path)
+                    element.send_keys(str(resume_path))
                 else:
-                    print("Resume directory is not set. Please provide a valid resume directory.")
+                    print("Resume not found or invalid. Generating a new resume.")
+                    self._create_and_upload_resume(element)
             elif 'cover' in parent.text.lower():
                 self._create_and_upload_cover_letter(element)
 
@@ -183,13 +181,12 @@ class LinkedInEasyApplier:
             return available_resumes[int(choice) - 1]
         return None
 
-    def _create_and_upload_resume(self, element):
+    def _create_and_upload_resume(self, element: WebElement) -> None:
         max_retries = 3
         retry_delay = 1
-        folder_path = 'generated_cv'
+        folder_path = Path('generated_cv')
 
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
+        folder_path.mkdir(exist_ok=True)
         for attempt in range(max_retries):
             try:
                 html_string = self.gpt_answerer.get_resume_html()
@@ -197,22 +194,19 @@ class LinkedInEasyApplier:
                     temp_html_file.write(html_string)
                     file_name_HTML = temp_html_file.name
 
-                file_name_pdf = f"resume_{uuid.uuid4().hex}.pdf"
-                file_path_pdf = os.path.join(folder_path, file_name_pdf)
-                
-                with open(file_path_pdf, "wb") as f:
-                    f.write(base64.b64decode(utils.HTML_to_PDF(file_name_HTML)))
-                    
-                element.send_keys(os.path.abspath(file_path_pdf))
-                time.sleep(2)  # Give some time for the upload process
-                os.remove(file_name_HTML)
-                return True
-            except Exception:
+                file_name_pdf = folder_path / f"resume_{uuid.uuid4().hex}.pdf"
+                utils.HTML_to_PDF(file_name_HTML, file_name_pdf)
+
+                element.send_keys(str(file_name_pdf.resolve()))
+                time.sleep(2)  # Allow time for the upload process
+                Path(file_name_HTML).unlink(missing_ok=True)
+                return
+            except Exception as e:
                 if attempt < max_retries - 1:
                     time.sleep(retry_delay)
                 else:
                     tb_str = traceback.format_exc()
-                    raise Exception(f"Max retries reached. Upload failed: \\\\\\nTraceback:\\\\\\n{tb_str}")
+                    print(f"Resume generation failed after {max_retries} attempts: {tb_str}")
 
     def _upload_resume(self, element: WebElement) -> None:
         if self.resume_dir:
