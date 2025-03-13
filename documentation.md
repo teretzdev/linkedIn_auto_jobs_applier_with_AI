@@ -115,6 +115,53 @@ Follow these steps to set up the project:
 
 ## Troubleshooting
 
+### Installation Methods
+
+#### Method 1: Using pip with requirements.txt
+```bash
+pip install -r requirements.txt
+```
+
+#### Method 2: Using setup.py (Recommended)
+```bash
+pip install -e .
+```
+
+#### Method 3: For Windows Users
+Run the included batch file:
+```
+install_dependencies.bat
+```
+
+### Troubleshooting webdriver_manager Issues
+
+If you encounter the error `ModuleNotFoundError: No module named 'webdriver_manager'` after installation:
+
+1. **Reinstall with force option**:
+   ```bash
+   pip install webdriver-manager==4.0.2 --force-reinstall
+   ```
+
+2. **Check Python Environment**:
+   - Ensure you're using the same Python environment where you installed the dependencies
+   - If using a virtual environment, make sure it's activated
+
+3. **Path Issues**:
+   - Sometimes Python can't find modules due to path issues. Try installing with:
+   ```bash
+   python -m pip install webdriver-manager==4.0.2
+   ```
+
+4. **Verify Installation**:
+   ```bash
+   python -c "import webdriver_manager; print(webdriver_manager.__version__)"
+   ```
+   This should print the version if installed correctly.
+
+---
+
+## Troubleshooting
+
 ### Common Issues
 1. **Browser Initialization Failed**:
    - Ensure ChromeDriver is installed and compatible with your Chrome version.
